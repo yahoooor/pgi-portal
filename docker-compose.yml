@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   nginx:
-    image: nginx-pig
+    image: nginx-pgi
     build: ./portal-pgi
     restart: always
     environment:
@@ -54,7 +54,7 @@ services:
 
   workers:
     build:
-      context: ./pig-backend
+      context: ./pgi-backend
       dockerfile: Dockerfile
     command: Workers
     restart: always
@@ -76,7 +76,7 @@ services:
 
   restapi:
     build:
-      context: ./pig-backend
+      context: ./pgi-backend
       dockerfile: Dockerfile
     command: RestApi
     restart: always
