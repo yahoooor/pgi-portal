@@ -1,0 +1,35 @@
+<div [hidden]="hidden">
+    <div class="layers-container">
+        <div *ngFor="let layerGroup of layers">
+            <div class="layer-group">
+                <i [class]="layerGroup.expanded ? 'pi pi-angle-down expand-icon' : 'pi pi-angle-right expand-icon'"
+                    (click)="toggleLayerGroup(layerGroup)"></i>
+                <p-checkbox [(ngModel)]="layerGroup.checked" [binary]="true" [inputId]="layerGroup.name"
+                    (onChange)="layerGroupVisibilityChange($event, layerGroup)"></p-checkbox>
+                <label style="flex-grow: 1;" [for]="layerGroup.name">{{layerGroup.name}}</label>
+                <span style="cursor: pointer;">
+                    <i class="pi pi-times" (click)="deleteLayerGroup(layerGroup)"></i>
+                </span>
+            </div>
+
+            <div *ngIf="layerGroup.expanded" class="child-layers">
+                <div *ngFor="let childLayer of layerGroup.childLayers">
+                    <div class="child-layer">
+                        <i [class]="childLayer.expanded ? 'pi pi-angle-down expand-icon' : 'pi pi-angle-right expand-icon'"
+                            (click)="toggleChildLayer(childLayer)"></i>
+                        <p-checkbox [(ngModel)]="childLayer.checked" [binary]="true" [inputId]="childLayer.name"
+                            (onChange)="childLayerVisibilityChange($event, childLayer)"></p-checkbox>
+                        <label style="word-break: break-word;">{{childLayer.name}}</label>
+
+                    </div>
+
+                    <div *ngIf="childLayer.expanded" class="layer-legend">
+                        <img *ngIf="childLayer.legendUrl" [src]="childLayer.legendUrl" />
+                        <div *ngIf="childLayer.legendUrl === undefined">Brak legendy</div>
+                        <div *ngIf="childLayer.color" class="circle" [ngStyle]="{ 'border-color': childLayer.color  }"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

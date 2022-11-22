@@ -1,0 +1,4 @@
+<app-slider-right [@rightSlideInOut]="rightSliderState"></app-slider-right>
+<app-slider-bottom class="slider-bottom"  [@bottomSlideInOut]="bottomSliderState"
+    [ngStyle]="{'left': '' + leftSliderWidth + 'px', 'width':'calc(100vw - ' + leftSliderWidth + 'px - ' + rightSliderWidth + 'px)', 'transition': 'all 550ms', 'transition-timing-function': 'ease-in-out' }">
+    ></app-slider-bottom>

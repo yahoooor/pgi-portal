@@ -1,0 +1,70 @@
+$transition : .5s;
+$width : 1.7rem;
+$radius : 1rem;
+$angle : 35deg;
+$bg : whitesmoke;
+$buttonbg : whitesmoke;
+
+.button {
+  background: $buttonbg;
+  border-radius: $width;
+  background: $buttonbg;
+  cursor: pointer;
+  transition: $transition/2;
+  margin: 2rem;
+  margin-right: -100px;
+
+  &:active {
+    background: darken($buttonbg, 20%);
+    transition: 0;
+  }
+}
+
+.arrow {
+  position: relative;
+  background: $bg;
+  width: $width;
+  height: $width/8;  
+  transition: $transition;
+  border-radius: $radius;
+  transform-origin: right center;
+
+  &:before { transform: rotate(-$angle); }
+  &:after { transform: rotate($angle); }
+
+  &:before, &:after {
+      display: block;
+      content: "";
+      position: absolute;
+      left: 0;
+      background: $bg;
+      width: $width/2;
+      height: $width/8;
+      transform-origin: $width/20 center;
+      transition: $transition;
+      border-radius: $radius;
+    }
+}
+
+.switch.right {
+  .arrow {  
+    &:before, &:after {
+      left: $width - $width/20;
+    }
+    &:before { transform: rotate($angle*4); }
+    &:after { transform: rotate(-$angle*4); }
+  }
+}
+
+.flip { transform: translateZ(1rem) perspective(600); }
+
+.flip.right {
+  transform: translateZ(1rem) perspective(600) rotateY(180deg);  
+}
+
+/* ------------------------ */
+html, body { height: 100%; }
+body {
+  background: whitesmoke;
+  -webkit-backface-visibility: hidden;
+}

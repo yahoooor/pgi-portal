@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="input-container">
+        <div class="service-title"> 
+            Adres usługi ATOM:
+        </div>
+        <div class="url-container">
+            <span class="p-input-icon-right">
+                <i *ngIf="searchingAtom" class="pi pi-spin pi-spinner" ></i>
+                <input type="text" pInputText [(ngModel)]="urlAtom" (ngModelChange)=cswInputChange() />
+            </span>
+            <span style="margin-left: 5px;">
+                <i *ngIf="urlAtom" class="pi pi-times" (click)="resetSearching();"></i>
+            </span>
+        </div>
+    </div>
+    
+    
+    <br>
+
+    <div class="results-container">
+        <div class="result">
+            <div class="result-header">
+                Top Atom Feed (Service)
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingTopAtom" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsTopAtom" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingTopAtom">
+                    {{ textTopAtom }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="result" >
+            <div class="result-header">
+                DatasetFeed
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingDatasetFeed" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsDatasetFeed" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingDatasetFeed">
+                    {{ textDatasetFeed }}
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="result" >
+            <div class="result-header">
+                Open Search Description
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingOpenSearch" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsOpenSearch" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingOpenSearch">
+                    {{ textOpenSearch }}
+                </div>
+                
+            </div>
+        </div>
+
+
+    </div>
+    
+    
+</div>

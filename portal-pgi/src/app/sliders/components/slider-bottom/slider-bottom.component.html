@@ -1,0 +1,25 @@
+<div class="bottom-slider-container">
+    <div class="outside">
+        <!--
+   <div class="map-buttons">
+            <div class="btn-group">
+                <input type="image" class="map-button" (click)="zoomIn()" src="./assets/icons/plus.svg" />
+                <input type="image" class="map-button" (click)="zoomOut()" src="./assets/icons/minus.svg" />
+                <input type="image" class="map-button" (click)="centerMap()" src="./assets/icons/aim.svg" />
+            </div>
+        </div>
+        -->
+     
+        
+        <div class="arrow-layout" (click)="toggleBottomSlider()" [@arrowVisibilityState]="arrowVisibilityState">
+            <!--
+<input [@bottomSliderState]="bottomSliderState" type="image" class="arrow-button" (click)="toggleBottomSlider()"
+                src="./assets/icons/left-arrow.svg" />
+            -->
+            <app-arrow-up [isArrowOpen]="!isArrowOpen" ></app-arrow-up>
+        </div>
+    </div>
+    <div class="inside">
+        <app-slider-bottom-content></app-slider-bottom-content>
+    </div>
+</div>

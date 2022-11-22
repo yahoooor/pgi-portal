@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="input-container">
+        <div class="service-title"> 
+            Adres usługi CSW:
+        </div>
+        <div class="url-container">
+            <span class="p-input-icon-right">
+                <i *ngIf="searchingCsw" class="pi pi-spin pi-spinner" ></i>
+                <input type="text" pInputText [(ngModel)]="urlCsw" (ngModelChange)=cswInputChange() />
+            </span>
+            <span style="margin-left: 5px;">
+                <i *ngIf="urlCsw" class="pi pi-times" (click)="resetSearching();"></i>
+            </span>
+        </div>
+    </div>
+    
+    
+    <br>
+
+    <div class="results-container">
+        <div class="result">
+            <div class="result-header">
+                GetCapabilities
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetCapabilities" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsGetCapabilities" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingGetCapabilities">
+                    {{ textGetCapabilities }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="result" >
+            <div class="result-header">
+                DescribeRecord
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingDescribeRecord" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsDescribeRecord" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingDescribeRecord">
+                    {{ textDescribeRecord }}
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="result" >
+            <div class="result-header">
+                GetRecord
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetRecord" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsGetRecord" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingGetRecord">
+                    {{ textGetRecord }}
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="result" >
+            <div class="result-header">
+                GetRecordById
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetRecordById" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsGetRecordById" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingGetRecordById">
+                    {{ textGetRecordById }}
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+    
+    
+</div>

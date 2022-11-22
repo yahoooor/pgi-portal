@@ -1,0 +1,96 @@
+<div class="container">
+    <div class="input-container">
+        <div class="service-title"> 
+            Adres usługi WFS:
+        </div>
+        <div class="url-container">
+            <span class="p-input-icon-right">
+                <i *ngIf="searchingWfs" class="pi pi-spin pi-spinner" ></i>
+                <input type="text" pInputText [(ngModel)]="urlWfs" (ngModelChange)=wfsInputChange() />
+            </span>
+            <span style="margin-left: 5px;">
+                <i *ngIf="urlWfs" class="pi pi-times" (click)="resetSearching();"></i>
+            </span>
+        </div>
+    </div>
+    
+    
+    <br>
+
+    <div class="results-container">
+        <div class="result">
+            <div class="result-header">
+                GetCapabilities
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetCapabilities" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+                
+                <ng-container *ngIf="!loadingGetCapabilities">
+                    <div *ngFor="let error of errorsGetCapabilities" class="error" (click)="showValidationError(error.error)">
+                        <i class="pi pi-question-circle error-icon"></i>
+                        <p>
+                            {{ error }}
+                        </p>
+                    </div>
+                </ng-container>
+                
+                <div *ngIf="!loadingGetCapabilities">
+                    {{ textGetCapabilities }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="result" >
+            <div class="result-header">
+                DescribeFeatureType
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingDescribeFeatureType" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+                
+
+                <ng-container *ngIf="!loadingDescribeFeatureType">
+                    <div *ngFor="let error of errorsDescribeFeatureType" class="error" (click)="showValidationError(error.error)">
+                        <i class="pi pi-question-circle error-icon"></i>
+                        <p>
+                            {{ error }}
+                        </p>
+                    </div>
+                </ng-container>
+        
+                <div *ngIf="!loadingDescribeFeatureType">
+                    {{ textDescribeFeatureType }}
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="result">
+            <div class="result-header">
+                GetFeature
+            </div>
+            
+            
+
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetFeature" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <ng-container *ngIf="!loadingGetFeature">
+                    <div *ngFor="let error of errorsGetFeature" class="error" (click)="showValidationError(error.error)">
+                        <i class="pi pi-question-circle error-icon"></i>
+                        <p>
+                            {{ error }}
+                        </p>
+                    </div>
+                </ng-container>
+                
+                <div *ngIf="!loadingGetFeature">
+                    {{ textGetFeature }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>

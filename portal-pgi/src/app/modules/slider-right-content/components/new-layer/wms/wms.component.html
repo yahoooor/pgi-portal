@@ -1,0 +1,30 @@
+<div class="service-title"> 
+    Adres usługi WMS:
+</div>
+<div>
+    <span class="p-input-icon-right">
+        <i *ngIf="searchingWms" class="pi pi-spin pi-spinner" ></i>
+        <input type="text" pInputText [(ngModel)]="urlWms" (ngModelChange)=wmsInputChange() />
+    </span>
+    <span style="margin-left: 5px;">
+        <i *ngIf="urlWms" class="pi pi-times" (click)="resetSearching(); urlWms=''"></i>
+    </span>
+</div>
+
+<div class="wms-results">
+    <div class="results-title">
+        <strong *ngIf="wmsGroupTitle">{{ wmsGroupTitle }}:</strong>
+    </div>
+    
+    <div class="results-container">
+        <div *ngFor="let layer of wmsLayers; let i = index" class="result-item">
+            <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="layer.isSelected" (onChange)="onLayerCheckboxChange($event, layer)"></p-checkbox>
+
+            <div class="layer-result">{{ layer.Title }} </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="wmsLayers.length" class="result-button">
+    <button pButton type="button" label="DODAJ" class="p-button-rounded" (click)="addLayers()"></button>
+</div>

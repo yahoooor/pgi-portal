@@ -1,0 +1,51 @@
+$layer-left-padding: 15px;
+$layer-top-padding: 20px;
+
+.layers-container {
+  padding: $layer-left-padding $layer-top-padding;
+  display: flex;
+  flex-direction: column;
+  gap: $layer-top-padding;
+
+}
+
+.layer-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.child-layers {
+  padding-left: $layer-left-padding;
+  padding-top: $layer-top-padding;
+
+  display: flex;
+  flex-direction: column;
+  gap: $layer-top-padding;
+
+  .child-layer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.layer-legend {
+  padding-top: $layer-top-padding;
+  padding-left: 25px;
+}
+
+.expand-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.circle {
+  height: 20px;
+  width: 20px;
+  margin-left: 4px;
+  background-color: rgba(255,255,255, 0.5);
+  //border-radius: 50%;
+  border-style: solid;
+  border-width: 5px;
+}

@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="input-container">
+        <div class="service-title">
+            Adres usługi WMS:
+        </div>
+        <div class="url-container">
+            <span class="p-input-icon-right">
+                <i *ngIf="searchingWms" class="pi pi-spin pi-spinner"></i>
+                <input type="text" pInputText [(ngModel)]="urlWms" (ngModelChange)=wmsInputChange() />
+            </span>
+            <span style="margin-left: 5px;">
+                <i *ngIf="urlWms" class="pi pi-times" (click)="resetSearching();"></i>
+            </span>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="results-container">
+
+        <div class="result">
+            <div class="result-header">
+                GetCapabilities
+            </div>
+        
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetCapabilities" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        
+                <div *ngFor="let error of errorsGetCapabilities" class="error" (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+        
+                <div *ngIf="!loadingGetCapabilities">
+                    {{ textGetCapabilities }}
+                </div>
+            </div>
+        </div>
+
+        <div class="result">
+            <div class="result-header">
+                GetMap
+            </div>
+
+            <div class="result-info">
+
+                <div>
+                    <span *ngIf="isGetMapVisible">Walidacja GetMap ukończona pomyślnie</span>
+                    <img #getMapImg [src]="urlGetMap" width="300px" (click)="imgClick($event)" style="border: 1px solid grey;">
+                    <br>
+                    <span *ngIf="clickX !== '' ">({{ clickX }}, {{ clickY }})</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result">
+            <div class="result-header">
+                GetFeatureInfo
+            </div>
+
+            <div class="result-info">
+                <p-progressSpinner *ngIf="loadingGetFeature" [style]="{width: '25px', height: '25px'}"
+                    styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s">
+                </p-progressSpinner>
+
+                <div *ngFor="let error of errorsGetFeature" class="error"
+                    (click)="showValidationError(error.error)">
+                    <i class="pi pi-question-circle error-icon"></i>
+                    <p>
+                        {{ error }}
+                    </p>
+                </div>
+
+                <div *ngIf="!loadingGetFeature">
+                    {{ textGetFeature }}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

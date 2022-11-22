@@ -1,0 +1,118 @@
+:host {
+    position: fixed;
+    //left: 420px;
+    bottom: 0;
+    z-index: 9999;
+    //width: 99vw;
+    //width: 80%;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.bottom-slider-container {
+    //width: 100%;
+    text-align: center;
+    background: whitesmoke;
+    color: #fff;
+    float: bottom;
+    height: 308px;
+    width: 100%;
+}
+
+
+.outside{
+    //margin-top: 50px;
+    //float: bottom;
+    background: transparent;
+}
+
+.inside{
+    
+}
+
+.right-layout{
+  position: fixed;
+  right: 0;
+  //height: 100vh;
+  top: 0;
+  //top: 0;
+  //background: black;
+  //height: 100px;
+  //width: 100px;
+}
+
+.arrow-layout{
+
+    margin-top: -49px;
+    margin-right: 35px;
+    float: right;
+    //height: 32px;
+    //width: 32px;
+    transform: rotate(90deg);
+    transition: all 400ms;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding-bottom: 0.25rem;
+    padding-right: 0.6rem;
+    padding-left: 0.6rem;
+    padding-top: 0.25rem;
+    background-color: #0b6ba7;
+    cursor: pointer;
+  }
+
+.arrow-button {
+    transform: rotate(90deg);
+}
+
+
+
+/*map */
+
+/*  outside  */
+
+.map-buttons{
+    display: block;
+    margin-top: -145px;
+    float: left;
+    margin-left: 15px;
+
+}
+
+.btn-group input {
+    //margin-right: -60px;
+    //padding-left: 11px;
+    background-color: rgb(255, 255, 255); /* Green background */
+    //border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    display: block; /* Make the buttons appear below each other */
+  }
+  
+  .btn-group input:not(:last-child) {
+    border-bottom: none; /* Prevent double borders */
+  }
+  
+  /* Add a background color on hover */
+  .btn-group input:hover {
+    background-color: lightblue
+  }
+  .map-button {
+    padding: 3px;
+    margin-top: 1rem;
+    border-radius: 25px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    box-shadow:  0 0 10px 3px rgba(0,0,0,0.6);
+      -moz-box-shadow: 0 0 10px  3px rgba(0,0,0,0.6);
+      -webkit-box-shadow: 0 0 10px 3px rgba(0,0,0,0.6);
+      -o-box-shadow: 0 0 10px 3px rgba(0,0,0,0.6);
+    transition: all 0s ease 0s;
+    cursor: pointer;
+    outline: none;
+  }
+  

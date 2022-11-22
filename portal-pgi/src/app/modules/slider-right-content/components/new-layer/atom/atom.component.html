@@ -1,0 +1,37 @@
+<div class="service-title">
+    Adres usługi ATOM:
+</div>
+<div>
+    <span class="p-input-icon-right">
+        <i *ngIf="searchingAtom" class="pi pi-spin pi-spinner"></i>
+        <input type="text" pInputText [(ngModel)]="urlAtom" (ngModelChange)=atomInputChange() />
+    </span>
+    <span style="margin-left: 5px;">
+        <i *ngIf="urlAtom" class="pi pi-times" (click)="resetSearching(); urlAtom=''"></i>
+    </span>
+</div>
+
+<div class="atom-results">
+    <div class="results-title">
+        <strong *ngIf="atomGroupTitle">{{ atomGroupTitle }}:</strong>
+    </div>
+
+    <div class="results-container">
+        <div *ngFor="let atomEntry of atomEntries; let i = index" class="result-item">
+            <!--
+                <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
+            -->
+            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled" (click)="addLayer(atomEntry)"></p-button>
+            <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading" (click)="downloadAtom($event, atomEntry)"></p-button>
+            
+
+            <div class="layer-result">{{ atomEntry.title }} <br> <b><i>{{ atomEntry.type}}</i> | {{ atomEntry.category }}</b></div>
+        </div>
+    </div>
+</div>
+
+<!--
+<div *ngIf="atomEntries.length" class="result-button">
+    <button pButton type="button" label="DODAJ" class="p-button-rounded" (click)="addLayers()"></button>
+</div>
+-->
