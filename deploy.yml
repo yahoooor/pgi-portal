@@ -2,8 +2,7 @@ version: '3.6'
 
 services:
   nginx:
-    image: nginx-pgi
-    build: ./portal-pgi
+    image: localhost:5000/inspire-portal:latest
     restart: always
     environment:
       NODE_ENV: production
@@ -16,6 +15,18 @@ services:
       - 9080:80
     networks:
       - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -30,6 +41,18 @@ services:
       interval: 20s
       timeout: 10s
       retries: 3
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
   redis:
     image: 'bitnami/redis:latest'
@@ -38,20 +61,42 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
   flower:
     image: mher/flower:1.2
     restart: always
     environment:
-      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_BROKER_URL=amqp://guest@rabbitmq:5672//
       - FLOWER_PORT=5555
     networks:
       - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
   workers:
-    build:
-      context: ./pgi-backend
-      dockerfile: Dockerfile
+    image: localhost:5000/inspire-validator:latest
     command: Workers
     restart: always
     environment:
@@ -69,11 +114,21 @@ services:
       - CELERY_CONSUME_QUEUES=["celery"]
     networks:
       - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
   restapi:
-    build:
-      context: ./pgi-backend
-      dockerfile: Dockerfile
+    image: localhost:5000/inspire-validator:latest
     command: RestApi
     restart: always
     environment:
@@ -90,8 +145,20 @@ services:
       - REST_WORKERS=2
     networks:
       - default
-      
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 1s
+        failure_action: continue
+        monitor: 120s
+        max_failure_ratio: 0.3
 
 networks:
   default:
     attachable: True
+
