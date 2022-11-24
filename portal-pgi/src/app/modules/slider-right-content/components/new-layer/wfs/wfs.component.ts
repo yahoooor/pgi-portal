@@ -48,6 +48,8 @@ export class WfsComponent implements OnInit {
   wfsGroupTitle = ""
   wfsLayers: any[] = []
 
+  invertedCoordinates = false;
+
 
   value = false
   selectedLayers: any = {}
@@ -133,7 +135,7 @@ export class WfsComponent implements OnInit {
               console.log(dataXML)
               var features = vectorSource.getFormat()?.readFeatures(dataXML, {
                 featureProjection: 'EPSG:3857',
-                dataProjection: "EPSG:4326",
+                dataProjection: that.invertedCoordinates ? "inverted_EPSG:4326" : "EPSG:4326",
               }) as Feature<Geometry>[];
 
               console.log(features)

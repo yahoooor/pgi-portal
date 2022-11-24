@@ -52,6 +52,9 @@ export class AtomComponent implements OnInit {
   atomGroupTitle = ""
   atomEntries: AtomEntry[] = []
 
+  invertedCoordinates = false;
+
+
   urlAtomChanged: Subject<string> = new Subject<string>();
 
   constructor(private http: HttpService,
@@ -81,6 +84,8 @@ export class AtomComponent implements OnInit {
 
     let atomLinks: string[] = []
 
+    url = this.http.corsUrl + url
+
     this.http.getCapabilities(url).subscribe(
       (dataXML: any) => {
         const parser = new DOMParser();
@@ -105,7 +110,7 @@ export class AtomComponent implements OnInit {
 
         // check all links in atom XML
         for (let link of atomLinks) {
-          this.http.getCapabilities(link).subscribe(
+          this.http.getCapabilities(this.http.corsUrl + link).subscribe(
             async dataXML => {
 
               const xml = parser.parseFromString(dataXML, 'text/xml');
@@ -255,7 +260,7 @@ export class AtomComponent implements OnInit {
           (dataXML: any) => {
             var features = vectorSource.getFormat()?.readFeatures(dataXML, {
               featureProjection: 'EPSG:3857',
-              dataProjection: "EPSG:4326",
+              dataProjection: that.invertedCoordinates ? "inverted_EPSG:4326" : "EPSG:4326",
             }) as Feature<Geometry>[];
 
             vectorSource.addFeatures(features);

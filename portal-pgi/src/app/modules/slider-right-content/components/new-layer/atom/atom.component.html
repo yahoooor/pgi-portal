@@ -11,6 +11,13 @@
     </span>
 </div>
 
+<br>
+<div>
+    <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false" [(ngModel)]="invertedCoordinates" ></p-checkbox>
+    <label [for]="'coords'"> Zamień współrzędne</label>
+</div>
+<br>
+
 <div class="atom-results">
     <div class="results-title">
         <strong *ngIf="atomGroupTitle">{{ atomGroupTitle }}:</strong>
@@ -21,12 +28,21 @@
             <!--
                 <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
             -->
-            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled" (click)="addLayer(atomEntry)"></p-button>
-            <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading" (click)="downloadAtom($event, atomEntry)"></p-button>
-            
+            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled"
+                (click)="addLayer(atomEntry)"></p-button>
+            <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading"
+                (click)="downloadAtom($event, atomEntry)"></p-button>
 
-            <div class="layer-result">{{ atomEntry.title }} <br> <b><i>{{ atomEntry.type}}</i> | {{ atomEntry.category }}</b></div>
+
+            <div class="layer-result">{{ atomEntry.title }} <br> <b><i>{{ atomEntry.type}}</i> | {{ atomEntry.category
+                    }}</b></div>
         </div>
+    </div>
+
+    <br>
+    <div class="note-info">
+        <i>Na mapie można wyświetlić zbiory danych GML o rozmiarze poniżej 10MB. W celu przeglądania pozostałych zbiorów
+            prosimy o pobranie pliku i wykorzystanie desktopowych narzędzi GIS.</i>
     </div>
 </div>
 
