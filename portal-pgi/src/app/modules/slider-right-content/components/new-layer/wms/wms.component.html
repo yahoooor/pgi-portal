@@ -11,6 +11,13 @@
     </span>
 </div>
 
+<br>
+<div>
+    <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false" [(ngModel)]="invertedCoordinates" ></p-checkbox>
+    <label [for]="'coords'"> Zamień współrzędne</label>
+</div>
+<br>
+
 <div class="wms-results">
     <div class="results-title">
         <strong *ngIf="wmsGroupTitle">{{ wmsGroupTitle }}:</strong>

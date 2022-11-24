@@ -35,6 +35,7 @@ export class WmsComponent implements OnInit {
   wmsGroupTitle = ""
   wmsLayers: any[] = []
 
+  invertedCoordinates = false;
 
   value = false
   selectedLayers: any = {}

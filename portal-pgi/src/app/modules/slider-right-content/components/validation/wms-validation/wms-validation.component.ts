@@ -230,6 +230,7 @@ export class WmsValidationComponent implements OnInit {
           `&BBOX=${bboxString}`
 
         this.urlGetMap = this.urlGetMap.replace("http://192.168.1.63:3002/", "")
+        this.textGetFeature = "W celu wykonania zapytania i jego walidacji kliknij obiekt na obrazie powyżej."
         this.isGetMapVisible = true;
 
         this.crs = crs

@@ -6,6 +6,8 @@ $layer-top-padding: 20px;
   display: flex;
   flex-direction: column;
   gap: $layer-top-padding;
+  overflow-y: auto;
+  max-height: 84vh;
 
 }
 
