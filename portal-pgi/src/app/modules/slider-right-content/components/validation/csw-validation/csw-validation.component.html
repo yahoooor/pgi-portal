@@ -9,7 +9,7 @@
                 <input type="text" pInputText [(ngModel)]="urlCsw" (ngModelChange)=cswInputChange() />
             </span>
             <span style="margin-left: 5px;">
-                <i *ngIf="urlCsw" class="pi pi-times" (click)="resetSearching();"></i>
+                <i *ngIf="urlCsw" class="pi pi-times" (click)="cancelSearching();"></i>
             </span>
         </div>
     </div>

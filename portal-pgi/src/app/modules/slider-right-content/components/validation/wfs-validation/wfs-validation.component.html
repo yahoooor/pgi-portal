@@ -9,7 +9,7 @@
                 <input type="text" pInputText [(ngModel)]="urlWfs" (ngModelChange)=wfsInputChange() />
             </span>
             <span style="margin-left: 5px;">
-                <i *ngIf="urlWfs" class="pi pi-times" (click)="resetSearching();"></i>
+                <i *ngIf="urlWfs" class="pi pi-times" (click)="cancelSearching();"></i>
             </span>
         </div>
     </div>

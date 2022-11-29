@@ -9,7 +9,7 @@
                 <input type="text" pInputText [(ngModel)]="urlWms" (ngModelChange)=wmsInputChange() />
             </span>
             <span style="margin-left: 5px;">
-                <i *ngIf="urlWms" class="pi pi-times" (click)="resetSearching();"></i>
+                <i *ngIf="urlWms" class="pi pi-times" (click)="cancelSearching();"></i>
             </span>
         </div>
     </div>
@@ -46,8 +46,8 @@
 
             <div class="result-info">
 
-                <div>
-                    <span *ngIf="isGetMapVisible">Walidacja GetMap ukończona pomyślnie</span>
+                <div *ngIf="isGetMapVisible">
+                    <span >Walidacja GetMap ukończona pomyślnie</span>
                     <img #getMapImg [src]="urlGetMap" width="300px" (click)="imgClick($event)" style="border: 1px solid grey;">
                     <br>
                     <span *ngIf="clickX !== '' ">({{ clickX }}, {{ clickY }})</span>

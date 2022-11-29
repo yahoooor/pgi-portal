@@ -62,6 +62,10 @@ export class AtomValidationComponent implements OnInit {
 
   parseGetCapabilities(url: string) {
 
+    if(url == "" || url == " ") {
+      return 
+    }
+
     this.startloadingAll()
 
     url = this.http.corsUrl + url
@@ -126,7 +130,7 @@ export class AtomValidationComponent implements OnInit {
     
 
     url = url.replace(this.http.corsUrl, "")
-    this.http.validateXml(url).subscribe(
+    this.httpTopAtom = this.http.validateXml(url).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusTopAtom = result.status),
@@ -191,7 +195,7 @@ export class AtomValidationComponent implements OnInit {
     ) */
 
     url = url.replace(this.http.corsUrl, "")
-    this.http.validateXml(url).subscribe(
+    this.httpDatasetFeed = this.http.validateXml(url).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusDatasetFeed = result.status),
@@ -255,7 +259,7 @@ export class AtomValidationComponent implements OnInit {
     ) */
 
     url = url.replace(this.http.corsUrl, "")
-    this.http.validateXml(url).subscribe(
+    this.httpOpenSearch = this.http.validateXml(url).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusOpenSearch = result.status),
@@ -323,12 +327,13 @@ export class AtomValidationComponent implements OnInit {
   }
 
   cancelSearching() {
-    this.closeLoadingAll();
     this.resetSearching()
+    this.urlAtom = ""
+    this.atomInputChange();
 
   }
 
-  cswInputChange() {
+  atomInputChange() {
     this.urlAtomChanged.next(this.urlAtom)
   }
 

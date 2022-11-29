@@ -62,7 +62,6 @@ export class WfsComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => {
-      this.resetSearching()
       this.parseWfs(this.urlWfs)
     })
   }
@@ -205,7 +204,7 @@ export class WfsComponent implements OnInit {
 
     // adding new layers a a group to legend
     let newLayerGroup: LayerGroupLegend = {
-      name: this.wfsGroupTitle ? this.wfsGroupTitle : "WFS",
+      name: this.wfsGroupTitle ? this.wfsGroupTitle + " [WFS]": "WFS",
       checked: true,
       expanded: false,
       childLayers: childLayers,
@@ -232,7 +231,7 @@ export class WfsComponent implements OnInit {
         layers: WmsChildLayers[WmsLayers.length]
       })
       wmsLayerGroup.setProperties({
-        name: this.wfsGroupTitle ? this.wfsGroupTitle : "WFS",
+        name: this.wfsGroupTitle ? this.wfsGroupTitle + " [WFS]" : "WFS",
       })
 
 
@@ -255,8 +254,8 @@ export class WfsComponent implements OnInit {
   }
   getOutputFormat(layer: any) {
     
-    let outputFormats = layer.OutputFormats
-    let formats = outputFormats['Format'] || outputFormats['wfs:Format']
+    let outputFormats = layer.OutputFormats || {}
+    let formats = outputFormats['Format'] || outputFormats['wfs:Format'] || []
     console.log(formats)
     // if there are multiple formats
     if (Array.isArray(formats)) {
@@ -293,6 +292,9 @@ export class WfsComponent implements OnInit {
   }
 
   parseWfs(url: string) {
+
+    this.resetSearching()
+
     this.searchingWfs = true
 
     //url = url.split("?")[0]
@@ -315,9 +317,9 @@ export class WfsComponent implements OnInit {
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
         console.log(obj)
 
-        let capabilities = obj.WFS_Capabilities || obj['wfs:WFS_Capabilities']
-        let featureTypeList = capabilities.FeatureTypeList || capabilities['wfs:FeatureTypeList']
-        let featureList = featureTypeList.FeatureType || featureTypeList['wfs:FeatureType']
+        let capabilities = obj.WFS_Capabilities || obj['wfs:WFS_Capabilities'] || {}
+        let featureTypeList = capabilities.FeatureTypeList || capabilities['wfs:FeatureTypeList'] || {}
+        let featureList = featureTypeList.FeatureType || featureTypeList['wfs:FeatureType'] || []
 
         if (!Array.isArray(featureList)){
           featureList = [featureList]
@@ -338,10 +340,10 @@ export class WfsComponent implements OnInit {
         }
 
         // set title to layer group
-        this.wfsGroupTitle = capabilities['ows:ServiceIdentification']['ows:Title']
+        let serviceIdentification = capabilities['ows:ServiceIdentification'] || {}
+        this.wfsGroupTitle = serviceIdentification['ows:Title'] || ""
         this.searchingWfs = false
       },
-
       error => {
         this.resetSearching()
         this.searchingWfs = false
@@ -355,6 +357,12 @@ export class WfsComponent implements OnInit {
     this.wfsGroupTitle = ""
     this.selectedLayers = []
     this.searchingWfs = false;
+  }
+
+  cancelSearching() {
+    this.resetSearching()
+    this.urlWfs = ""
+    this.wfsInputChange()
   }
 
   checkLayerGroupExists(newLayer: LayerGroupLegend) {

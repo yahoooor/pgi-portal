@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { catchError, delay, repeatWhen, takeWhile, tap, timeout } from 'rxjs/operators';
+import { catchError, delay, map, repeatWhen, takeWhile, tap, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  corsUrl = "" // "http://192.168.1.63:3002/"
+  corsUrl =  "" //"http://192.168.1.63:3002/"
 
 
   getCapabilities(url: string) {
@@ -28,6 +28,11 @@ export class HttpService {
   downloadFile(url: string) {
     url = this.corsUrl + url
     return this.http.get(url, { responseType: 'blob' })
+  }
+
+  getSize(url: any) {
+
+   return this.http.head(url, {observe: 'response'})
   }
 
   async getFileSize(url: any) {
@@ -95,12 +100,12 @@ export class HttpService {
       "url": url,
     }
 
-    return this.http.post(`/api-backend/xml/validate`, body)
+    return this.http.post(`${environment.backend}/xml/validate`, body)
     
   }
 
   getValidationStatus(taskId: string) {
     
-    return this.http.get(`/api-backend/xml/result/` + taskId)
+    return this.http.get(`${environment.backend}/xml/result/` + taskId)
   }
 }

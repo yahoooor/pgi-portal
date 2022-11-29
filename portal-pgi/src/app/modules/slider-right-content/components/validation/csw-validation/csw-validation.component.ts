@@ -67,6 +67,10 @@ export class CswValidationComponent implements OnInit {
 
   parseGetCapabilities(url: string) {
 
+    if (url == "" || url == " "){
+      return
+    }
+    this.resetSearching()
     this.startloadingAll()
 
     url = this.http.corsUrl + url
@@ -162,7 +166,7 @@ export class CswValidationComponent implements OnInit {
     )*/
 
     urlGetCapabilities = urlGetCapabilities.replace(this.http.corsUrl, "")
-    this.http.validateXml(urlGetCapabilities).subscribe(
+    this.httpGetCapabilities = this.http.validateXml(urlGetCapabilities).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetCapabilities = result.status),
@@ -235,7 +239,7 @@ export class CswValidationComponent implements OnInit {
     )*/
 
     urlDescribeRecord = urlDescribeRecord.replace(this.http.corsUrl, "")
-    this.http.validateXml(urlDescribeRecord).subscribe(
+    this.httpGetDescribeFeatureType = this.http.validateXml(urlDescribeRecord).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusDescribeRecord = result.status),
@@ -300,7 +304,7 @@ export class CswValidationComponent implements OnInit {
       })*/
 
     url = url.replace(this.http.corsUrl, "")
-    this.http.validateXml(url).subscribe(
+    this.httpGetFeature =  this.http.validateXml(url).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetRecord = result.status),
@@ -382,7 +386,6 @@ export class CswValidationComponent implements OnInit {
 
   resetSearching() {
     this.searchingCsw = false;
-    this.urlCsw = "";
     this.closeLoadingAll();
 
     this.errorsDescribeRecord = [];
@@ -397,12 +400,14 @@ export class CswValidationComponent implements OnInit {
 
     this.httpGetCapabilities.unsubscribe()
     this.httpGetDescribeFeatureType.unsubscribe()
-    this.httpGetFeature
+    this.httpGetFeature.unsubscribe()
   }
 
   cancelSearching() {
     this.closeLoadingAll();
     this.resetSearching()
+    this.urlCsw = "";
+    this.cswInputChange();
 
   }
 

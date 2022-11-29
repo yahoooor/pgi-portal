@@ -25,7 +25,7 @@
 
                     <div *ngIf="childLayer.expanded" class="layer-legend">
                         <img *ngIf="childLayer.legendUrl" [src]="childLayer.legendUrl" />
-                        <div *ngIf="childLayer.legendUrl === undefined">Brak legendy</div>
+                        <div *ngIf="childLayer.legendUrl === undefined && !childLayer.color">Brak legendy</div>
                         <div *ngIf="childLayer.color" class="circle" [ngStyle]="{ 'border-color': childLayer.color  }"> </div>
                     </div>
                 </div>

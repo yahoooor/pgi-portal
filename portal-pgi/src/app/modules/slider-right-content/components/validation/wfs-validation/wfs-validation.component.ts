@@ -99,6 +99,11 @@ export class WfsValidationComponent implements OnInit {
 
   parseGetCapabilities(url: string) {
 
+    if (url == " " || url == "") {
+      return
+    }
+
+    this.resetSearching()
     this.startloadingAll()
 
     url = this.http.corsUrl + url
@@ -176,7 +181,7 @@ export class WfsValidationComponent implements OnInit {
     */
 
     urlGetCapabilities = urlGetCapabilities.replace(this.http.corsUrl, "")
-    this.http.validateXml(urlGetCapabilities).subscribe(
+    this.httpGetCapabilities = this.http.validateXml(urlGetCapabilities).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetCapabilities = result.status),
@@ -252,7 +257,7 @@ export class WfsValidationComponent implements OnInit {
 
     urlDescribeFeatureType = urlDescribeFeatureType.replace(this.http.corsUrl, "")
     
-    this.http.validateXml(urlDescribeFeatureType).subscribe(
+    this.httpGetDescribeFeatureType = this.http.validateXml(urlDescribeFeatureType).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetDescribeFeatureType = result.status),
@@ -326,7 +331,7 @@ export class WfsValidationComponent implements OnInit {
     ) */
 
     urlGetFeature = urlGetFeature.replace(this.http.corsUrl, "")
-    this.http.validateXml(urlGetFeature).subscribe(
+    this.httpGetFeature = this.http.validateXml(urlGetFeature).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetFeature = result.status),
@@ -369,7 +374,6 @@ export class WfsValidationComponent implements OnInit {
 
   resetSearching() {
     this.searchingWfs = false;
-    this.urlWfs = "";
     this.closeLoadingAll();
 
     this.errorsDescribeFeatureType = [];
@@ -387,7 +391,9 @@ export class WfsValidationComponent implements OnInit {
 
   cancelSearching() {
     this.closeLoadingAll();
-    this.resetSearching()    
+    this.resetSearching()  ;
+    this.urlWfs = "";
+    this.wfsInputChange();
 
   }
 

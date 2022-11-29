@@ -6,10 +6,10 @@
         <div class="url-container">
             <span class="p-input-icon-right">
                 <i *ngIf="searchingAtom" class="pi pi-spin pi-spinner" ></i>
-                <input type="text" pInputText [(ngModel)]="urlAtom" (ngModelChange)=cswInputChange() />
+                <input type="text" pInputText [(ngModel)]="urlAtom" (ngModelChange)=atomInputChange() />
             </span>
             <span style="margin-left: 5px;">
-                <i *ngIf="urlAtom" class="pi pi-times" (click)="resetSearching();"></i>
+                <i *ngIf="urlAtom" class="pi pi-times" (click)="cancelSearching();"></i>
             </span>
         </div>
     </div>

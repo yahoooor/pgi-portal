@@ -7,7 +7,7 @@
         <input type="text" pInputText [(ngModel)]="urlWms" (ngModelChange)=wmsInputChange() />
     </span>
     <span style="margin-left: 5px;">
-        <i *ngIf="urlWms" class="pi pi-times" (click)="resetSearching(); urlWms=''"></i>
+        <i *ngIf="urlWms" class="pi pi-times" (click)="cancelSearching(); urlWms=''"></i>
     </span>
 </div>
 
@@ -16,7 +16,6 @@
     <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false" [(ngModel)]="invertedCoordinates" ></p-checkbox>
     <label [for]="'coords'"> Zamień współrzędne</label>
 </div>
-<br>
 
 <div class="wms-results">
     <div class="results-title">

@@ -1,6 +1,6 @@
 import { identifierModuleUrl } from '@angular/compiler';
 import { Component, OnInit, setTestabilityGetter } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { HttpService } from 'src/app/services/http.service';
 import { MapService } from 'src/app/services/map.service';
@@ -26,7 +26,6 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 import { LayerLegend, WmsLayersLegend, LayerGroupLegend, WmsLayers, WmsChildLayers } from 'src/app/consts/layers';
 
-
 interface AtomEntry {
   category: string,
   title: string,
@@ -36,7 +35,8 @@ interface AtomEntry {
   isLoading: boolean,
   contentSize: any,
   type: string,
-  disabled: boolean
+  disabled: boolean,
+  sizeLoading: boolean
 }
 
 @Component({
@@ -51,10 +51,12 @@ export class AtomComponent implements OnInit {
 
   atomGroupTitle = ""
   atomEntries: AtomEntry[] = []
+  atomLinks: string[] = []
+  linksArrSize = 0;
 
   invertedCoordinates = false;
 
-
+  atomLinks$ = new Subject<number>();
   urlAtomChanged: Subject<string> = new Subject<string>();
 
   constructor(private http: HttpService,
@@ -65,13 +67,61 @@ export class AtomComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => {
-      this.resetSearching()
       this.parseAtom(this.urlAtom)
     })
   }
 
   ngOnInit(): void {
 
+    this.atomLinks$.subscribe(
+      linkCount => {
+        console.log(linkCount)
+        console.log(this.linksArrSize)
+        if (linkCount == this.linksArrSize) {
+          setTimeout(() => {
+            this.atomEntries.forEach((element: AtomEntry) => {
+              console.log("GET SIZE: ", element)
+
+              this.http.getSize(element.url).subscribe(
+                data => {
+                  let contentSize = data.headers.get('content-length')
+                  element.contentSize = Number(contentSize)
+                  element.sizeLoading = false
+
+                  if (element.type == "application/gml+xml" &&
+                    element.contentSize <= 5000000 &&
+                    element.category == "EPSG:4326") {
+
+                    element.disabled = false
+                  }
+                },
+                error => {
+                  element.sizeLoading = false
+                }
+              )
+              /*
+              this.http.getFileSize(element.url).then(
+                contentSize => {
+                  element.contentSize = Number(contentSize)
+                  element.sizeLoading = false
+                }
+              ).catch(erorr => {
+                this.searchingAtom = false
+              })
+
+              if (element.type == "application/gml+xml" &&
+                element.contentSize <= 5000000 &&
+                element.category == "EPSG:4326") {
+
+                element.disabled = false
+              } */
+            });
+
+          }, 300);
+
+        }
+      }
+    )
   }
 
 
@@ -80,14 +130,20 @@ export class AtomComponent implements OnInit {
   }
 
   parseAtom(url: string) {
+
+    if (url == '' || url == " ") {
+      return
+    }
+
+    this.resetSearching()
     this.searchingAtom = true
 
-    let atomLinks: string[] = []
+    //let atomLinks: string[] = []
 
     url = this.http.corsUrl + url
 
     this.http.getCapabilities(url).subscribe(
-      (dataXML: any) => {
+      async (dataXML: any) => {
         const parser = new DOMParser();
         const xml = parser.parseFromString(dataXML, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
@@ -96,64 +152,24 @@ export class AtomComponent implements OnInit {
         console.log(findAllByKey(obj, "entry"))
 
         // set title 
-        let feed = findAllByKey(obj, "feed")[0] as any
-        this.atomGroupTitle = feed.title
+        let feed = findAllByKey(obj, "feed")[0] as any || {}
+        this.atomGroupTitle = feed.title || ""
 
         // set entries
         let entries = findAllByKey(obj, "entry") as any
         for (let entry of entries) {
 
 
-          atomLinks.push(...findAllByKey(entry, "href"))
+          this.atomLinks.push(...findAllByKey(entry, "href"))
 
         }
+        this.linksArrSize = entries.length
+
+        this.getAtomLinks(this.atomLinks)
+
 
         // check all links in atom XML
-        for (let link of atomLinks) {
-          this.http.getCapabilities(this.http.corsUrl + link).subscribe(
-            async dataXML => {
 
-              const xml = parser.parseFromString(dataXML, 'text/xml');
-              const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-              let entries = findAllByKey(obj, "entry") as any
-
-              for (let entry of entries) {
-                this.searchingAtom = true
-
-                let tempAtomEntry: AtomEntry = {
-                  isSelected: false,
-                  title: findAllByKey(entry, "title")[0],
-                  category: findAllByKey(entry, "label")[0],
-                  url: findAllByKey(entry, "href")[0],
-                  id: entry.id,
-                  isLoading: false,
-                  contentSize: 0,
-                  type: findAllByKey(entry, "type")[0],
-                  disabled: true
-                }
-                await this.http.getFileSize(tempAtomEntry.url).then(
-                  
-                  contentSize => tempAtomEntry.contentSize = Number(contentSize)
-                ).catch( erorr => {
-                  this.searchingAtom = false
-                })
-
-                if (tempAtomEntry.type == "application/gml+xml" &&
-                  tempAtomEntry.contentSize <= 5000000 &&
-                  tempAtomEntry.category == "EPSG:4326") {
-
-                  tempAtomEntry.disabled = false
-                }
-
-                this.atomEntries.push(tempAtomEntry)
-                this.searchingAtom = false
-
-              }
-
-              this.searchingAtom = false
-            }
-          )
-        }
 
 
       },
@@ -161,8 +177,61 @@ export class AtomComponent implements OnInit {
         this.searchingAtom = false
       }
     )
+  }
 
+  getAtomLinks(atomLinks: any) {
+    let linkCounter = 0
 
+    for (let link of atomLinks) {
+      this.http.getCapabilities(this.http.corsUrl + link).subscribe(
+        dataXML => {
+
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(dataXML, 'text/xml');
+          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          let entries = findAllByKey(obj, "entry") as any
+
+          for (let entry of entries) {
+            this.searchingAtom = true
+
+            let tempAtomEntry: AtomEntry = {
+              isSelected: false,
+              title: findAllByKey(entry, "title")[0],
+              category: findAllByKey(entry, "label")[0],
+              url: findAllByKey(entry, "href")[0],
+              id: entry.id,
+              isLoading: false,
+              contentSize: 0,
+              type: findAllByKey(entry, "type")[0],
+              disabled: true,
+              sizeLoading: true
+            }
+            /*await this.http.getFileSize(tempAtomEntry.url).then(
+              
+              contentSize => tempAtomEntry.contentSize = Number(contentSize)
+            ).catch( erorr => {
+              this.searchingAtom = false
+            })
+
+            if (tempAtomEntry.type == "application/gml+xml" &&
+              tempAtomEntry.contentSize <= 5000000 &&
+              tempAtomEntry.category == "EPSG:4326") {
+
+              tempAtomEntry.disabled = false
+            }*/
+
+            this.atomEntries.push(tempAtomEntry)
+            this.searchingAtom = false
+            console.log(tempAtomEntry)
+
+            linkCounter++
+            this.atomLinks$.next(linkCounter)
+          }
+
+          this.searchingAtom = false
+        }
+      )
+    }
   }
 
   downloadAtom(evt: any, atomEntry: AtomEntry) {
@@ -208,8 +277,15 @@ export class AtomComponent implements OnInit {
 
   resetSearching() {
     this.atomEntries = [];
+    this.atomLinks = [];
     this.atomGroupTitle = "";
+    this.linksArrSize = 0;
+  }
 
+  cancelSearching() {
+    this.resetSearching()
+    this.urlAtom = ""
+    this.atomInputChange()
   }
 
   onLayerCheckboxChange(evt: any, layer: any) {

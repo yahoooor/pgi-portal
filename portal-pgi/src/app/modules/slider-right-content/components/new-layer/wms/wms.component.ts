@@ -4,22 +4,15 @@ import { Subject } from 'rxjs/internal/Subject';
 import { HttpService } from 'src/app/services/http.service';
 import { MapService } from 'src/app/services/map.service';
 
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { LayerGroupLegend, LayerLegend, WmsChildLayers, WmsLayers, WmsLayersLegend } from 'src/app/consts/layers';
 import ImageLayer from 'ol/layer/Image';
 import ImageWMS from 'ol/source/ImageWMS';
 import LayerGroup from 'ol/layer/Group';
 import Layer from 'ol/layer/Layer';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
-import { GeoJSON, WFS, GML } from 'ol/format';
 
-import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
-import Vector from 'ol/source/Vector';
-import GML32 from 'ol/format/GML32';
-import { Projection } from 'ol/proj';
-import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
+
 import { ToastService } from 'src/app/services/toast.service';
 @Component({
   selector: 'app-wms',
@@ -44,6 +37,9 @@ export class WmsComponent implements OnInit {
     private toast: ToastService,
     private mapService: MapService) {
     this.urlWmsChanged.pipe(
+      tap(url => {
+        console.log(url)
+      }),
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => this.getWmsCapabilities(this.urlWms))
@@ -141,7 +137,7 @@ export class WmsComponent implements OnInit {
 
     // adding new layers a a group to legend
     let newLayerGroup: LayerGroupLegend = {
-      name: this.wmsGroupTitle,
+      name: this.wmsGroupTitle + " [WMS]",
       checked: true,
       expanded: false,
       childLayers: childLayers,
@@ -164,7 +160,7 @@ export class WmsComponent implements OnInit {
         layers: WmsChildLayers[WmsLayers.length]
       })
       wmsLayerGroup.setProperties({
-        layerName: this.wmsGroupTitle
+        layerName: this.wmsGroupTitle + " [WMS]"
       })
 
       WmsLayers.push(wmsLayerGroup)
@@ -187,6 +183,14 @@ export class WmsComponent implements OnInit {
     this.selectedLayers = []
     this.searchingWms = false
   }
+
+  cancelSearching() {
+    this.resetSearching()
+    this.urlWms = ""
+    this.wmsInputChange()
+  }
+
+
 
   onLayerCheckboxChange(event: any, layer: any) {
     if (event.checked) {

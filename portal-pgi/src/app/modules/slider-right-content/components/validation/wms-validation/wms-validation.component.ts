@@ -63,7 +63,6 @@ export class WmsValidationComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(() => {
       //this.resetSearching()
-      this.inputChanged()
       this.parseGetCapabilities(this.urlWms)
     })
   }
@@ -120,7 +119,7 @@ export class WmsValidationComponent implements OnInit {
       
       urlGetFeatureInfo = urlGetFeatureInfo.replace(this.http.corsUrl, "")
       
-      this.http.validateXml(urlGetFeatureInfo).subscribe(
+      this.httpGetFeature = this.http.validateXml(urlGetFeatureInfo).subscribe(
         (data: any) => {
           this.http.getValidationStatus(data['task_id']).pipe(
             tap((result: any) => this.statusGetFeature = result.status),
@@ -162,6 +161,12 @@ export class WmsValidationComponent implements OnInit {
   }
 
   parseGetCapabilities(url: string) {
+
+    if (url == "" || url == " ") {
+      return 
+    }
+
+    this.inputChanged()
 
     this.startloadingAll()
 
@@ -280,7 +285,7 @@ export class WmsValidationComponent implements OnInit {
     ) */
 
     urlGetCapabilities = urlGetCapabilities.replace(this.http.corsUrl, "")
-    this.http.validateXml(urlGetCapabilities).subscribe(
+    this.httpGetCapabilities = this.http.validateXml(urlGetCapabilities).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetCapabilities = result.status),
@@ -325,7 +330,6 @@ export class WmsValidationComponent implements OnInit {
 
   resetSearching() {
     this.searchingWms = false;
-    this.urlWms = "";
     this.clickX = ""
     this.clickY = ""
     this.closeLoadingAll();
@@ -346,6 +350,8 @@ export class WmsValidationComponent implements OnInit {
   cancelSearching() {
     this.closeLoadingAll();
     this.resetSearching()
+    this.urlWms = ""
+    this.wmsInputChange()
 
   }
 
