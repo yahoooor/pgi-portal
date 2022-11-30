@@ -27,7 +27,7 @@
                 <p-progressSpinner *ngIf="loadingGetCapabilities" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
                 
                 <ng-container *ngIf="!loadingGetCapabilities">
-                    <div *ngFor="let error of errorsGetCapabilities" class="error" (click)="showValidationError(error.error)">
+                    <div *ngFor="let error of errorsGetCapabilities" class="error" (click)="showValidationError(error)">
                         <i class="pi pi-question-circle error-icon"></i>
                         <p>
                             {{ error }}
@@ -51,7 +51,7 @@
                 
 
                 <ng-container *ngIf="!loadingDescribeFeatureType">
-                    <div *ngFor="let error of errorsDescribeFeatureType" class="error" (click)="showValidationError(error.error)">
+                    <div *ngFor="let error of errorsDescribeFeatureType" class="error" (click)="showValidationError(error)">
                         <i class="pi pi-question-circle error-icon"></i>
                         <p>
                             {{ error }}
@@ -77,7 +77,7 @@
                 <p-progressSpinner *ngIf="loadingGetFeature" [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
         
                 <ng-container *ngIf="!loadingGetFeature">
-                    <div *ngFor="let error of errorsGetFeature" class="error" (click)="showValidationError(error.error)">
+                    <div *ngFor="let error of errorsGetFeature" class="error" (click)="showValidationError(error)">
                         <i class="pi pi-question-circle error-icon"></i>
                         <p>
                             {{ error }}

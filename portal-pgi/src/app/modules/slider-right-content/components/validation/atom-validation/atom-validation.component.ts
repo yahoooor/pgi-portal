@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, repeatWhen, takeWhile, tap } from 'rxjs/operators';
-import { HttpService } from 'src/app/services/http.service';
+import { HttpService, SchemaType } from 'src/app/services/http.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -130,7 +130,7 @@ export class AtomValidationComponent implements OnInit {
     
 
     url = url.replace(this.http.corsUrl, "")
-    this.httpTopAtom = this.http.validateXml(url).subscribe(
+    this.httpTopAtom = this.http.validateXml(url, SchemaType.ATOM).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusTopAtom = result.status),
@@ -195,7 +195,7 @@ export class AtomValidationComponent implements OnInit {
     ) */
 
     url = url.replace(this.http.corsUrl, "")
-    this.httpDatasetFeed = this.http.validateXml(url).subscribe(
+    this.httpDatasetFeed = this.http.validateXml(url, SchemaType.ATOM).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusDatasetFeed = result.status),
@@ -259,7 +259,7 @@ export class AtomValidationComponent implements OnInit {
     ) */
 
     url = url.replace(this.http.corsUrl, "")
-    this.httpOpenSearch = this.http.validateXml(url).subscribe(
+    this.httpOpenSearch = this.http.validateXml(url, SchemaType.OPEN_SEARCH).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusOpenSearch = result.status),
@@ -350,7 +350,7 @@ export class AtomValidationComponent implements OnInit {
   }
 
   showValidationError(error: string) {
-    // this.popupService.showError(error)
+    this.popupService.showError(error)
   }
 
 }

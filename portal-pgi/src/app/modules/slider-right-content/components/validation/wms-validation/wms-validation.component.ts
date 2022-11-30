@@ -71,6 +71,7 @@ export class WmsValidationComponent implements OnInit {
   }
 
   imgClick(e: any) {
+    this.errorsGetFeature = [];
     this.clickX = e.offsetX
     this.clickY = e.offsetY
 
@@ -390,7 +391,7 @@ export class WmsValidationComponent implements OnInit {
 
   showValidationError(error: string) {
 
-    //this.popupService.showError(error)
+    this.popupService.showError(error)
   }
 
 }

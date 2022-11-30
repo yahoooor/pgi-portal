@@ -4,6 +4,13 @@ import { of } from 'rxjs';
 import { catchError, delay, map, repeatWhen, takeWhile, tap, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
+export enum SchemaType {
+  OPEN_SEARCH = "openSearch",
+  ATOM = "atom",
+  CSW_GET_RECORD = "cswGetRecord",
+  DEFAULT = ""
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +18,7 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  corsUrl =  "" //"http://192.168.1.63:3002/"
+  corsUrl = "" // "http://192.168.1.63:3002/"
 
 
   getCapabilities(url: string) {
@@ -94,10 +101,11 @@ export class HttpService {
   }
 */
 
-  validateXml (url: string) {
+  validateXml (url: string, schemaType: SchemaType = SchemaType.DEFAULT) {
 
     let body = {
       "url": url,
+      "schemaType": schemaType
     }
 
     return this.http.post(`${environment.backend}/xml/validate`, body)
@@ -109,3 +117,4 @@ export class HttpService {
     return this.http.get(`${environment.backend}/xml/result/` + taskId)
   }
 }
+

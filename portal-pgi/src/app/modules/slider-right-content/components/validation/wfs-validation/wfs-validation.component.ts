@@ -414,7 +414,7 @@ export class WfsValidationComponent implements OnInit {
   }
 
   showValidationError(error: string) {
-    // this.popupService.showError(error)
+    this.popupService.showError(error)
   }
 
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, repeatWhen, takeWhile, tap } from 'rxjs/operators';
-import { HttpService } from 'src/app/services/http.service';
+import { HttpService, SchemaType } from 'src/app/services/http.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -304,7 +304,7 @@ export class CswValidationComponent implements OnInit {
       })*/
 
     url = url.replace(this.http.corsUrl, "")
-    this.httpGetFeature =  this.http.validateXml(url).subscribe(
+    this.httpGetFeature =  this.http.validateXml(url, SchemaType.CSW_GET_RECORD).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(
           tap((result: any) => this.statusGetRecord = result.status),
