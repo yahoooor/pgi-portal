@@ -5,8 +5,9 @@ from typing import Optional, Any
 
 class XmlFileMetaModel(BaseModel):
     url: str
-    
-    
+    schemaType: str
+
+
 class TaskIdModel(BaseModel):
     task_id: str
     
