@@ -3,11 +3,18 @@ from enum import Enum
 from typing import Optional, Any
 
 
+class SchemaType(str, Enum):
+    Atom = "atom"
+    OpenSearch = "openSearch"
+    CswGetRecord = "cswGetRecord"
+    Builtin = ""
+
+
 class XmlFileMetaModel(BaseModel):
     url: str
-    schemaType: str
-
-
+    schemaType: SchemaType = SchemaType.Builtin
+    
+    
 class TaskIdModel(BaseModel):
     task_id: str
     
@@ -29,5 +36,4 @@ class TaskResultModel(BaseModel):
 class XmlValidationResult(BaseModel):
     valid: bool
     msg: Optional[str] = None
-
 

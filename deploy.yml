@@ -108,7 +108,7 @@ services:
       - TASK_SERIALIZER=pickle
       - ACCEPT_CONTENT=["pickle","json"]
       # celery workers
-      - CELERY_WORKERS=20
+      - CELERY_WORKERS=9
       - IMPORTS=["src.tasks"]
       - BROKER_HEARTBEAT=120
       - CELERY_CONSUME_QUEUES=["celery"]
