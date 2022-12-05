@@ -9,6 +9,7 @@ import { SliderRightComponent } from './components/slider-right/slider-right.com
 import { SliderBottomContentModule } from '../modules/slider-bottom-content/slider-bottom-content.module';
 import { ArrowUpComponent } from '../shared/arrow-up/arrow-up.component';
 import { ArrowRightComponent } from '../shared/arrow-right/arrow-right.component';
+import { FileSizePipe } from '../shared/filesize.pipe';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { ArrowRightComponent } from '../shared/arrow-right/arrow-right.component
     SliderBottomComponent,
     SliderRightComponent,
     ArrowUpComponent,
-    ArrowRightComponent
+    ArrowRightComponent    
   ],
   imports: [
     CommonModule,

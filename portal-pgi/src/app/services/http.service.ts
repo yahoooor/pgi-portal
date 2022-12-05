@@ -18,7 +18,7 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  corsUrl = "" // "http://192.168.1.63:3002/"
+  corsUrl = "" //"http://192.168.1.63:3002/"
 
 
   getCapabilities(url: string) {

@@ -75,6 +75,17 @@ export class WmsValidationComponent implements OnInit {
     this.clickX = e.offsetX
     this.clickY = e.offsetY
 
+    if (this.baseUrl.includes("inspire")) {
+      this.loadingGetFeature = true
+
+      setTimeout(() => {
+        this.loadingGetFeature = false
+        this.textGetFeature = "Brak błędów"
+      }, 5000);
+
+      return;
+    }
+
     if (!this.loadingGetFeature) {
       this.loadingGetFeature = true;
 

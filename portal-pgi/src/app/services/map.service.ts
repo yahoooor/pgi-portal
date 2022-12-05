@@ -5,10 +5,9 @@ import { register } from 'ol/proj/proj4';
 import Projection from 'ol/proj/Projection';
 import proj4, { Proj } from 'proj4'
 import GeoJSON from 'ol/format/GeoJSON';
+import * as olProj from 'ol/proj';
 
-import { MapBrowserEvent } from 'ol';
 
-import { Subject } from 'rxjs';
 import { BaseLayers } from '../consts/layers';
 import { addCoordinateTransforms, addEquivalentProjections } from 'ol/proj';
 
@@ -43,7 +42,7 @@ export class MapService {
       axisOrientation: 'enu',
       //extent: [-121656.5849, -294200.8899, 172945.8815, 277430.8421]
     });*/
-
+    
     // EPSG:2180
     proj4.defs('urn:ogc:def:crs:EPSG::2180',
       '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +axis=enu');
@@ -54,6 +53,11 @@ export class MapService {
     
     // EPSG:4326
     proj4.defs('inverted_EPSG:4326', '+proj=longlat +datum=WGS84 +no_defs +axis=neu');
+
+    // EPSG:4258
+    // proj4.defs("EPSG:4258","+proj=longlat +ellps=GRS80 +no_defs +type=crs");
+    proj4.defs("EPSG:4258","+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
+
 
     register(proj4);
     /*
@@ -74,16 +78,25 @@ export class MapService {
     this.map = new Map({
       layers: BaseLayers,
       view: new View({
-        //projection: myProjection,
-        //projection: 'EPSG:3857',
         //center: [361000.1344, 363000.9189],
 
+        /*
+        projection: 'EPSG:4258',
+        center: [0, 0],
+        extent: [-16.1, 32.88, 40.18, 84.17],
+        */
+       
         center: [2100000, 6700000],
         zoom: 6 //6.2,
       }),
       controls: [],
     });
-  }
+
+    console.log(olProj.get('inverted_EPSG:4326'))
+    console.log(olProj.get('EPSG:4258'))
+
+  } 
+  
 
   setView(center: [number, number], zoom?: number) {
     var currentZoom = this.map.getView().getZoom()

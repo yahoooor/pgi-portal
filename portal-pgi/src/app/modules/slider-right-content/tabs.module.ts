@@ -20,6 +20,8 @@ import { WfsValidationComponent } from './components/validation/wfs-validation/w
 import { WmsValidationComponent } from './components/validation/wms-validation/wms-validation.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { TooltipModule } from 'primeng/tooltip';
+import { FileSizePipe } from 'src/app/shared/filesize.pipe';
 
 
 
@@ -37,6 +39,7 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
     WfsValidationComponent,
     WmsValidationComponent,
     CswValidationComponent,
+    FileSizePipe,
     ],
   imports: [
     CommonModule,
@@ -47,6 +50,7 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
     FormsModule,
     DropdownModule,
     InputTextModule,
+    TooltipModule,
     AccordionModule,
     ButtonModule,
     ProgressSpinnerModule,
@@ -54,7 +58,8 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
   ],
   exports: [
     LayersComponent,
-    NewLayerComponent
+    NewLayerComponent,
+    FileSizePipe
   ],
   providers: [
     {

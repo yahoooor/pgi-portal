@@ -1,5 +1,6 @@
-@import url(//db.onlinewebfonts.com/c/33f225b8f5f7d6b34a0926f58f96c1e9?family=Open+Sans+Semibold);
-@import url(//db.onlinewebfonts.com/c/629a55a7e793da068dc580d184cc0e31?family=Open+Sans);
+//@import url('https://db.onlinewebfonts.com/c/33f225b8f5f7d6b34a0926f58f96c1e9?family=Open+Sans+Semibold');
+//@import url('https://db.onlinewebfonts.com/c/629a55a7e793da068dc580d184cc0e31?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
 @font-face {
     font-family: 'open-sans-semibold';
     src: url('../assets/fonts/opensans/OpenSans-Semibold.ttf') format('truetype');
@@ -71,4 +72,14 @@
 
 .page-content {
     max-height: calc(100% - 100px);
+}
+
+::ng-deep {
+    .p-button.p-button-text {
+        color: #444444;
+    }
+
+    .p-button.p-button-text:enabled:hover {
+        color: #444444;
+      }
 }
