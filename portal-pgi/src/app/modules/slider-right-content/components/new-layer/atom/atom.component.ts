@@ -399,7 +399,7 @@ export class AtomComponent implements OnInit {
 
           // adding new layers a a group to legend
           let newLayerGroup: LayerGroupLegend = {
-            name: this.atomGroupTitle ? this.atomGroupTitle : "ATOM",
+            name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
             checked: true,
             expanded: false,
             childLayers: childLayers,
@@ -419,7 +419,7 @@ export class AtomComponent implements OnInit {
               layers: WmsChildLayers[WmsLayers.length]
             })
             wmsLayerGroup.setProperties({
-              name: this.atomGroupTitle ? this.atomGroupTitle : "ATOM",
+              name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
             })
 
             WmsLayers.push(wmsLayerGroup)
@@ -488,7 +488,7 @@ export class AtomComponent implements OnInit {
 
       // adding new layers a a group to legend
       let newLayerGroup: LayerGroupLegend = {
-        name: this.atomGroupTitle ? this.atomGroupTitle : "ATOM",
+        name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]": "ATOM",
         checked: true,
         expanded: false,
         childLayers: childLayers,
@@ -508,7 +508,7 @@ export class AtomComponent implements OnInit {
           layers: WmsChildLayers[WmsLayers.length]
         })
         wmsLayerGroup.setProperties({
-          name: this.atomGroupTitle ? this.atomGroupTitle : "ATOM",
+          name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
         })
 
         WmsLayers.push(wmsLayerGroup)
