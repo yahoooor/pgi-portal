@@ -8,7 +8,7 @@ export const environment = {
   backendCors: "",
   backendUrl: "http://192.168.1.109:8000",
   backend:  "/api-backend" //"http://192.168.1.109:5000"
-  // backend: "http://192.168.1.109:5000"
+  //backend: "http://192.168.1.109:5000"
 
 };
 
