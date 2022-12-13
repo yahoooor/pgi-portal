@@ -101,6 +101,11 @@ export class HttpService {
   }
 */
 
+  getAtom(url: string) {
+    
+    return this.http.get(`${environment.backend}/atom?atom_url=${url}`)
+  }
+
   validateXml (url: string, schemaType: SchemaType = SchemaType.DEFAULT) {
 
     let body = {

@@ -95,7 +95,8 @@ export class AtomComponent implements OnInit {
                   element.sizeLoading = false
 
                   if (element.type == "application/gml+xml" &&
-                    element.contentSize <= 5000000 //&&
+                    element.contentSize <= 5000000 ||
+                    element.type == "application/x-shapefile"
                     /*element.category == "EPSG:4326"*/) {
 
                     element.disabled = false
@@ -298,10 +299,136 @@ export class AtomComponent implements OnInit {
 
   }
 
+  getFromShapefile(layer: AtomEntry) {
+    layer.sizeLoading = true
+
+    this.http.getAtom(layer.url!).subscribe(
+      (data: any) => {
+        
+        layer.sizeLoading = false;
+
+        data.forEach((geojson: any) => {
+          console.log(geojson)
+          let index = 0
+          let childLayers: LayerLegend[] = []
+          let childMapLayers: Layer[] = []
+
+          // iterate over selected layers
+
+          let color = `rgba(${[1, 2, 3].map(x => Math.random() * 256 | 0)}, 1.0)`
+          // layer to legend
+          let childLayer: LayerLegend = {
+            name: layer.title,
+            checked: true,
+            expanded: false,
+            parentIndex: WmsLayersLegend.length,
+            index: index++,
+            color: color
+
+            //legendUrl: layer.Style[0].LegendURL[0].OnlineResource
+          }
+          childLayers.push(childLayer)
+
+          let vectorSource = new VectorSource({
+            features: new GeoJSON().readFeatures(geojson),
+          });
+
+
+          let WFSLayer = new VectorLayer(
+            {
+              source: vectorSource,
+              style: function (feature) {
+
+                let isPolygon = feature.getGeometry()?.getType() == 'Polygon' || feature.getGeometry()?.getType() == 'MultiPolygon'
+
+                if (isPolygon) {
+                  return new Style({
+                    fill: undefined,
+                    stroke: new Stroke({
+                      color: color,
+                      width: 3
+                    }),
+                  })
+                }
+
+                return new Style({
+                  image: new RegularShape({
+                    fill: new Fill({
+                      color: 'rgba(255,255,255, 0.5)'
+                    }),
+                    stroke: new Stroke({
+                      color: color,
+                      width: 3
+                    }),
+                    points: 4,
+                    radius: 6,
+                    angle: Math.PI / 4,
+                  }),
+                })
+              }
+            });
+
+
+          childMapLayers.push(WFSLayer)
+
+
+
+          // adding new layers a a group to legend
+          let newLayerGroup: LayerGroupLegend = {
+            name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
+            checked: true,
+            expanded: false,
+            childLayers: childLayers,
+            index: WmsLayers.length
+          }
+
+          let layerExists = this.checkLayerExists(newLayerGroup)
+
+          if (layerExists) {
+            this.toastService.showMessageInfo("Wybrana warstwa już istnieje")
+          } else {
+            WmsLayersLegend.push(newLayerGroup)
+            WmsChildLayers.push(childMapLayers)
+
+            // adding new layers as a group to map
+            let wmsLayerGroup = new LayerGroup({
+              layers: WmsChildLayers[WmsLayers.length]
+            })
+            wmsLayerGroup.setProperties({
+              name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
+            })
+
+            WmsLayers.push(wmsLayerGroup)
+            this.mapService.map.addLayer(wmsLayerGroup)
+
+            this.toastService.showMessageSuccess("Dodano warstwę")
+          }
+
+          // return all layers
+          this.mapService.map.getLayers().forEach(layer => {
+            console.log(layer)
+          })
+          // vectorSource.addFeature(new Feature(new Circle()));
+
+        });
+      }, error => {
+        layer.sizeLoading = false;
+        this.toastService.showMessageError("Nieprawidłowa zawartość pliku")
+      })
+  }
+
   addLayer(layer: AtomEntry) {
     if (layer.disabled) { return }
 
     console.log(layer)
+
+    if (layer.type == "application/x-shapefile") {
+      console.log("GETTING FROM SHAPEFILE", layer.url)
+      this.getFromShapefile(layer)
+      return
+    }
+
+
 
     let index = 0
     let childLayers: LayerLegend[] = []
@@ -337,7 +464,7 @@ export class AtomComponent implements OnInit {
     let vectorSource: any
 
     if (childLayer.name == "Obszary dna morskiego - rodzaj osadów" || childLayer.name == 'Odwierty na potrzeby szczelinowania hydraulicznego' || childLayer.name == 'Zasoby energetyczne') {
-      
+
       let tempUrl = ""
 
       if (childLayer.name == "Obszary dna morskiego - rodzaj osadów") {
@@ -361,10 +488,10 @@ export class AtomComponent implements OnInit {
           let WFSLayer = new VectorLayer(
             {
               source: vectorSource,
-              style: function(feature) {
-            
+              style: function (feature) {
+
                 let isPolygon = feature.getGeometry()?.getType() == 'Polygon'
-    
+
                 if (isPolygon) {
                   return new Style({
                     fill: undefined,
@@ -374,7 +501,7 @@ export class AtomComponent implements OnInit {
                     }),
                   })
                 }
-    
+
                 return new Style({
                   image: new RegularShape({
                     fill: new Fill({
@@ -488,7 +615,7 @@ export class AtomComponent implements OnInit {
 
       // adding new layers a a group to legend
       let newLayerGroup: LayerGroupLegend = {
-        name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]": "ATOM",
+        name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
         checked: true,
         expanded: false,
         childLayers: childLayers,
@@ -522,8 +649,6 @@ export class AtomComponent implements OnInit {
         console.log(layer)
       })
     }
-
-
 
   }
 

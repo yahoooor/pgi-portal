@@ -8,7 +8,8 @@ export interface TabComponent {
     componentName: string
     componentIcon?: string,
     component: any
-    tabHeader: string
+    tabHeader: string,
+    tooltip: string
 }
 
 
@@ -18,18 +19,21 @@ export const COMPONENTS: TabComponent[] = [
         componentName: 'layers',
         componentIcon: './assets/icons/layers.svg',
         component: LayersComponent,
-        tabHeader: "WARSTWY"
+        tabHeader: "WARSTWY",
+        tooltip: "Warstwy"
     },
     {
         componentName: 'new-layer',
         componentIcon: './assets/icons/add.svg',
         component: NewLayerComponent,
-        tabHeader: "DODAJ DANE"
+        tabHeader: "DODAJ DANE",
+        tooltip: "Dodaj dane z usług"
     },
     {
         componentName: 'validation',
         componentIcon: './assets/icons/check.svg',
         component: ValidationComponent,
-        tabHeader: "WALIDACJA USŁUG"
+        tabHeader: "WALIDACJA USŁUG",
+        tooltip: "Walidacja"
     },
 ]

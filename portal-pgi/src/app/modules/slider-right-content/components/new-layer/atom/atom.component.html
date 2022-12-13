@@ -13,7 +13,8 @@
 
 <br>
 <div>
-    <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false" [(ngModel)]="invertedCoordinates" ></p-checkbox>
+    <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false"
+        [(ngModel)]="invertedCoordinates"></p-checkbox>
     <label [for]="'coords'"> Zamień współrzędne</label>
 </div>
 
@@ -27,7 +28,8 @@
             <!--
                 <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
             -->
-            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled" [loading]="atomEntry.sizeLoading" [pTooltip]="atomEntry.contentSize | filesize" tooltipPosition="left"
+            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled"
+                [loading]="atomEntry.sizeLoading" [pTooltip]="atomEntry.contentSize | filesize" tooltipPosition="left"
                 (click)="addLayer(atomEntry)"></p-button>
             <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading"
                 (click)="downloadAtom($event, atomEntry)"></p-button>

@@ -10,6 +10,7 @@ import { SliderBottomContentModule } from '../modules/slider-bottom-content/slid
 import { ArrowUpComponent } from '../shared/arrow-up/arrow-up.component';
 import { ArrowRightComponent } from '../shared/arrow-right/arrow-right.component';
 import { FileSizePipe } from '../shared/filesize.pipe';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { FileSizePipe } from '../shared/filesize.pipe';
     ButtonModule,
     DividerModule,
     SliderBottomContentModule,
+    TooltipModule,
 
   ],
   exports: [
