@@ -134,7 +134,7 @@ export class WfsComponent implements OnInit {
               console.log(dataXML)
               var features = vectorSource.getFormat()?.readFeatures(dataXML, {
                 featureProjection: 'EPSG:3857',
-                dataProjection: that.invertedCoordinates ? "inverted_EPSG:4326" : "EPSG:4326",
+                dataProjection: that.invertedCoordinates ? "EPSG:4326" : "inverted_EPSG:4326",
               }) as Feature<Geometry>[];
 
               console.log(features)

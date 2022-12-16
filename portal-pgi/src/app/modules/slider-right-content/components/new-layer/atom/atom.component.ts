@@ -304,7 +304,7 @@ export class AtomComponent implements OnInit {
 
     this.http.getAtom(layer.url!).subscribe(
       (data: any) => {
-        
+
         layer.sizeLoading = false;
 
         data.forEach((geojson: any) => {
@@ -463,192 +463,91 @@ export class AtomComponent implements OnInit {
 
     let vectorSource: any
 
-    if (childLayer.name == "Obszary dna morskiego - rodzaj osadów" || childLayer.name == 'Odwierty na potrzeby szczelinowania hydraulicznego' || childLayer.name == 'Zasoby energetyczne') {
 
-      let tempUrl = ""
+    vectorSource = new Vector({
+      format: new GML32({
+        srsName: "EPSG:4326"
+      }),
+      loader: function (extent: any, resolution, projection, success: any, failure: any) {
 
-      if (childLayer.name == "Obszary dna morskiego - rodzaj osadów") {
-        tempUrl = "assets/samples/SeaRegions.geojson"
-      } else if (childLayer.name == "Odwierty na potrzeby szczelinowania hydraulicznego") {
-        tempUrl = "assets/samples/Borehole.geojson"
-      } else if (childLayer.name == "Zasoby energetyczne") {
-        tempUrl = "assets/samples/EnergyResources.geojson"
-      }
+        that.http.getCapabilities(url).subscribe(
+          (dataXML: any) => {
 
-      that.httpClient.get(tempUrl).subscribe(
-        json => {
-          console.log(json)
-          vectorSource = new VectorSource({
-            features: new GeoJSON().readFeatures(json),
-          });
+            var features = vectorSource.getFormat()!.readFeatures(dataXML, {
+              featureProjection: 'EPSG:3857',
+              dataProjection: 'EPSG:4258' //that.invertedCoordinates ? "inverted_EPSG:4326" : "EPSG:4326",
+            }) as Feature<Geometry>[];
+            console.log(features)
+            vectorSource.addFeatures(features);
 
-
-          console.log(color)
-          console.log(vectorSource)
-          let WFSLayer = new VectorLayer(
-            {
-              source: vectorSource,
-              style: function (feature) {
-
-                let isPolygon = feature.getGeometry()?.getType() == 'Polygon'
-
-                if (isPolygon) {
-                  return new Style({
-                    fill: undefined,
-                    stroke: new Stroke({
-                      color: color,
-                      width: 3
-                    }),
-                  })
-                }
-
-                return new Style({
-                  image: new RegularShape({
-                    fill: new Fill({
-                      color: 'rgba(255,255,255, 0.5)'
-                    }),
-                    stroke: new Stroke({
-                      color: color,
-                      width: 3
-                    }),
-                    points: 4,
-                    radius: 6,
-                    angle: Math.PI / 4,
-                  }),
-                })
-              }
-            });
-
-
-          childMapLayers.push(WFSLayer)
-
-
-
-          // adding new layers a a group to legend
-          let newLayerGroup: LayerGroupLegend = {
-            name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
-            checked: true,
-            expanded: false,
-            childLayers: childLayers,
-            index: WmsLayers.length
+            success(features);
+          },
+          error => {
+            that.resetSearching()
+            vectorSource.removeLoadedExtent(extent);
+            failure();
           }
+        )
+      },
 
-          let layerExists = this.checkLayerExists(newLayerGroup)
-
-          if (layerExists) {
-            this.toastService.showMessageInfo("Wybrana warstwa już istnieje")
-          } else {
-            WmsLayersLegend.push(newLayerGroup)
-            WmsChildLayers.push(childMapLayers)
-
-            // adding new layers as a group to map
-            let wmsLayerGroup = new LayerGroup({
-              layers: WmsChildLayers[WmsLayers.length]
-            })
-            wmsLayerGroup.setProperties({
-              name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
-            })
-
-            WmsLayers.push(wmsLayerGroup)
-            this.mapService.map.addLayer(wmsLayerGroup)
-
-            this.toastService.showMessageSuccess("Dodano warstwę")
-          }
-
-          // return all layers
-          this.mapService.map.getLayers().forEach(layer => {
-            console.log(layer)
-          })
-          // vectorSource.addFeature(new Feature(new Circle()));
-
-        }
-      )
-
-    } else {
-      vectorSource = new Vector({
-        format: new GML32({
-          srsName: "EPSG:4326"
-        }),
-        loader: function (extent: any, resolution, projection, success: any, failure: any) {
-
-          that.http.getCapabilities(url).subscribe(
-            (dataXML: any) => {
-
-              var features = vectorSource.getFormat()!.readFeatures(dataXML, {
-                featureProjection: 'EPSG:3857',
-                dataProjection: 'EPSG:4258' //that.invertedCoordinates ? "inverted_EPSG:4326" : "EPSG:4326",
-              }) as Feature<Geometry>[];
-              console.log(features)
-              vectorSource.addFeatures(features);
-
-              success(features);
-            },
-            error => {
-              that.resetSearching()
-              vectorSource.removeLoadedExtent(extent);
-              failure();
-            }
-          )
-        },
-
-        strategy: bboxStrategy,
+      strategy: bboxStrategy,
 
 
+    });
+
+    let WFSLayer = new VectorLayer(
+      {
+        source: vectorSource,
+        style: new Style({
+          fill: undefined,
+          stroke: new Stroke({
+            color: color,
+            width: 3
+          }),
+        })
       });
 
-      let WFSLayer = new VectorLayer(
-        {
-          source: vectorSource,
-          style: new Style({
-            fill: undefined,
-            stroke: new Stroke({
-              color: color,
-              width: 3
-            }),
-          })
-        });
 
-
-      childMapLayers.push(WFSLayer)
+    childMapLayers.push(WFSLayer)
 
 
 
-      // adding new layers a a group to legend
-      let newLayerGroup: LayerGroupLegend = {
-        name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
-        checked: true,
-        expanded: false,
-        childLayers: childLayers,
-        index: WmsLayers.length
-      }
-
-      let layerExists = this.checkLayerExists(newLayerGroup)
-
-      if (layerExists) {
-        this.toastService.showMessageInfo("Wybrana warstwa już istnieje")
-      } else {
-        WmsLayersLegend.push(newLayerGroup)
-        WmsChildLayers.push(childMapLayers)
-
-        // adding new layers as a group to map
-        let wmsLayerGroup = new LayerGroup({
-          layers: WmsChildLayers[WmsLayers.length]
-        })
-        wmsLayerGroup.setProperties({
-          name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
-        })
-
-        WmsLayers.push(wmsLayerGroup)
-        this.mapService.map.addLayer(wmsLayerGroup)
-
-        this.toastService.showMessageSuccess("Dodano warstwę")
-      }
-
-      // return all layers
-      this.mapService.map.getLayers().forEach(layer => {
-        console.log(layer)
-      })
+    // adding new layers a a group to legend
+    let newLayerGroup: LayerGroupLegend = {
+      name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
+      checked: true,
+      expanded: false,
+      childLayers: childLayers,
+      index: WmsLayers.length
     }
+
+    let layerExists = this.checkLayerExists(newLayerGroup)
+
+    if (layerExists) {
+      this.toastService.showMessageInfo("Wybrana warstwa już istnieje")
+    } else {
+      WmsLayersLegend.push(newLayerGroup)
+      WmsChildLayers.push(childMapLayers)
+
+      // adding new layers as a group to map
+      let wmsLayerGroup = new LayerGroup({
+        layers: WmsChildLayers[WmsLayers.length]
+      })
+      wmsLayerGroup.setProperties({
+        name: this.atomGroupTitle ? this.atomGroupTitle + " [ATOM]" : "ATOM",
+      })
+
+      WmsLayers.push(wmsLayerGroup)
+      this.mapService.map.addLayer(wmsLayerGroup)
+
+      this.toastService.showMessageSuccess("Dodano warstwę")
+    }
+
+    // return all layers
+    this.mapService.map.getLayers().forEach(layer => {
+      console.log(layer)
+    })
+
 
   }
 
