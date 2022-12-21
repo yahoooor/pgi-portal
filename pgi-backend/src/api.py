@@ -67,8 +67,7 @@ class UnsupportedGeometryType(Exception):
 
 @app.get("/atom")
 def shp_to_geojson(atom_url):
-    geom_type={
-     0: 'NULL',
+    geom_type={0: 'NULL',
      1: 'POINT',
      3: 'LINE',
      5: 'POLYGON',
@@ -81,8 +80,7 @@ def shp_to_geojson(atom_url):
      23: 'LINE',
      25: 'POLYGON',
      28: 'MULTIPOINT',
-     31: 'MULTIPATCH'
-    }
+     31: 'MULTIPATCH'}
 
     zip_files = zipfile.ZipFile(io.BytesIO(requests.get(atom_url, allow_redirects=True).content))
     file_names_shp=set([i.filename[:-4] for i in zip_files.filelist])
@@ -94,7 +92,10 @@ def shp_to_geojson(atom_url):
         geojson={"type":"FeatureCollection","name":os.path.basename(shp),
                  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } }}
 
-        sf = shapefile.Reader(shp=io.BytesIO(zip_files.read(shp+'.shp')), dbf=io.BytesIO(zip_files.read(shp+'.dbf')))
+        try:
+            sf = shapefile.Reader(shp=io.BytesIO(zip_files.read(shp+'.shp')), dbf=io.BytesIO(zip_files.read(shp+'.dbf')))
+        except KeyError:
+            continue
         geometry_type=geom_type[sf.shapeType]
         field_names = [field[0] for field in sf.fields[1:]]
 
@@ -113,5 +114,6 @@ def shp_to_geojson(atom_url):
         else:
             raise UnsupportedGeometryType(geometry_type)
 
-        results.append(geojson)
+        results.append(json.dumps(geojson))
+        
     return results
