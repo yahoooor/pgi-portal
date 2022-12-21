@@ -30,6 +30,9 @@ import GeoJSON from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
 import { HttpClient } from '@angular/common/http';
 
+import { saveAs } from 'file-saver';
+
+
 
 interface AtomEntry {
   category: string,
@@ -58,6 +61,8 @@ export class AtomComponent implements OnInit {
   atomEntries: AtomEntry[] = []
   atomLinks: string[] = []
   linksArrSize = 0;
+
+  fileSize = 0;
 
   invertedCoordinates = false;
 
@@ -94,13 +99,15 @@ export class AtomComponent implements OnInit {
                   element.contentSize = Number(contentSize)
                   element.sizeLoading = false
 
-                  if (element.type == "application/gml+xml" &&
-                    element.contentSize <= 5000000 ||
-                    element.type == "application/x-shapefile"
-                    /*element.category == "EPSG:4326"*/) {
+                  if (element.contentSize > 0) {
+                    this.fileSize = element.contentSize
+                  }
+
+                  /*
+                  if (element.contentSize <= 5000000 || element.type == "application/x-shapefile") {
 
                     element.disabled = false
-                  }
+                  }*/
                 },
                 error => {
                   element.sizeLoading = false
@@ -249,6 +256,7 @@ export class AtomComponent implements OnInit {
     let downloadName = atomEntry.title + `(${atomEntry.category})`
     let downloadExtension = ""
 
+    
     this.http.downloadFile(atomEntry.url!).subscribe(
       (data: any) => {
         console.log(data)
@@ -278,6 +286,7 @@ export class AtomComponent implements OnInit {
       },
       error => {
         atomEntry.isLoading = false;
+        this.toastService.showMessageError("Nieprawidłowy link lub błąd po stronie serwera")
       }
     )
   }
@@ -343,7 +352,9 @@ export class AtomComponent implements OnInit {
 
                 if (isPolygon) {
                   return new Style({
-                    fill: undefined,
+                    fill: new Fill({
+                      color: 'rgba(0,0,0, 0.2)'
+                    }),
                     stroke: new Stroke({
                       color: color,
                       width: 3
@@ -418,8 +429,9 @@ export class AtomComponent implements OnInit {
   }
 
   addLayer(layer: AtomEntry) {
-    if (layer.disabled) { return }
 
+    // if (layer.disabled) { return }
+    if (!(layer.type == 'application/x-shapefile' && this.fileSize > 0 && this.fileSize < 10000000)) { return}
     console.log(layer)
 
     if (layer.type == "application/x-shapefile") {

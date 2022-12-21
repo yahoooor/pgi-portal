@@ -28,8 +28,8 @@
             <!--
                 <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
             -->
-            <p-button class="download-icon" icon="pi pi-eye" [disabled]="atomEntry.disabled"
-                [loading]="atomEntry.sizeLoading" [pTooltip]="atomEntry.contentSize | filesize" tooltipPosition="left"
+            <p-button class="download-icon" icon="pi pi-eye" [disabled]="!(atomEntry.type == 'application/x-shapefile' && fileSize > 0 && fileSize < 10000000)"
+                [loading]="atomEntry.sizeLoading" [pTooltip]="atomEntry.sizeLoading ? 'Trwa pobieranie wielkości pliku' : fileSize | filesize" tooltipPosition="left"
                 (click)="addLayer(atomEntry)"></p-button>
             <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading"
                 (click)="downloadAtom($event, atomEntry)"></p-button>
