@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-validation',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./validation.component.scss']
 })
 export class ValidationComponent implements OnInit {
+  @Input() isAtom = false;
 
   hidden = true;
   

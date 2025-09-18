@@ -107,8 +107,6 @@ export class WmsValidationComponent implements OnInit {
         `&j=${this.clickY}`
 
 
-      console.log(this.urlGetMap)
-      console.log(urlGetFeatureInfo)
       this.urlGetFeatureInfo = urlGetFeatureInfo.replace("http://192.168.1.63:3002/", "")
 
       /*
@@ -143,7 +141,6 @@ export class WmsValidationComponent implements OnInit {
             ),
           ).subscribe(
             data => {
-              console.log(data)
 
               if(data.status == "SUCCESS") {
 
@@ -194,7 +191,6 @@ export class WmsValidationComponent implements OnInit {
         const parser = new DOMParser();
         const xml = parser.parseFromString(dataXML, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-        console.log(obj)
 
         let capabilities = obj.WMS_Capabilities || obj['wms:WMS_Capabilities']
 
@@ -225,12 +221,9 @@ export class WmsValidationComponent implements OnInit {
         }
 
         let bboxString = `${boundingBox.minx}%2C${boundingBox.miny}%2C${boundingBox.maxx}%2C${boundingBox.maxy}`
-        console.log(bboxString)
-        console.log(crs)
 
         // get version
         let version = findAllByKey(capabilities, "ows:ServiceTypeVersion")[0]
-        console.log("VERSIONS", version)
 
         let baseUrl = url.split("?")[0]
         this.urlGetMap = baseUrl +
@@ -275,7 +268,6 @@ export class WmsValidationComponent implements OnInit {
       "SERVICE=WMS" +
       "&REQUEST=getCapabilities"
 
-    console.log("GET_CAPABILITIES URL: ", urlGetCapabilities)
 
     /*
     this.httpGetCapabilities = this.http.validateXML(urlGetCapabilities).subscribe(
@@ -311,7 +303,6 @@ export class WmsValidationComponent implements OnInit {
 
         ).subscribe(
           data => {
-            console.log(data)
 
             if(data.status == "SUCCESS") {
 

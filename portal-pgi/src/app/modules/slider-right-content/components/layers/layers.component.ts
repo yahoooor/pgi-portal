@@ -58,6 +58,7 @@ export class LayersComponent implements OnInit {
   toolsPanel!: QueryList<ElementRef>;
 
   hidden = true;
+  isLoading = false;
 
   layers = WmsLayersLegend
 
@@ -74,7 +75,9 @@ export class LayersComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-  
+    this.layerService.isLoading$.subscribe(isLoading => {
+      this.isLoading = isLoading;
+    })
   }
 
   toggleLayerGroup(layerGroup: LayerGroupLegend) {
@@ -87,7 +90,6 @@ export class LayersComponent implements OnInit {
   }
 
   opacitySliderChange(evt: Event, layerLegend: any){
-    console.log(evt)
     //this.layerService.setWmsLayerOpacity(layerLegend)
   }
 
@@ -101,10 +103,8 @@ export class LayersComponent implements OnInit {
   }
 
   deleteLayerGroup(layerGroup: LayerGroupLegend) {
-    console.log(layerGroup)
 
     this.mapService.map.getLayers().forEach((layer: any) => {
-      console.log(layer)
       if (layerGroup.name === layer.values_.name || layerGroup.name === layer.values_.layerName) {
         this.mapService.map.removeLayer(layer)
         

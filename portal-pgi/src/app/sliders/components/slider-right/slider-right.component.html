@@ -1,9 +1,44 @@
 <div class="slider-right-content">
     <div class="outside">
         <div class="btn-group">
-            <div *ngFor="let component of tabComponents">
-                <input type="image" [id]="component.componentName" class="icon-button" (click)="selectTab(component)" [pTooltip]="component.tooltip" tooltipPosition="left"
-                    [src]="component.componentIcon" #tabButtons />
+            <ng-container *ngFor="let component of tabComponents">
+                <div *ngIf="!(isAtom && component.componentName === 'layers')">
+                    <input type="image" [id]="component.componentName" class="icon-button"
+                        (click)="selectTab(component)" [pTooltip]="component.tooltip" tooltipPosition="left"
+                        [src]="component.componentIcon" #tabButtons />
+                </div>
+            </ng-container>
+
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" (click)="increaseZoom()" tooltipPosition="left"
+                    src="./assets/icons/plus-dark.svg" width="50px" />
+            </div>
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" tooltipPosition="left" (click)="decreaseZoom()"
+                    src="./assets/icons/minus.svg" width="50px" />
+            </div>
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" tooltipPosition="left" (click)="goBackPosition()"
+                    src="./assets/icons/back.svg" width="50px" />
+            </div>
+
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" tooltipPosition="left" (click)="goForwardPosition()"
+                    src="./assets/icons/next.svg" width="50px" />
+            </div>
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" (click)="measureDistance()" tooltipPosition="left"
+                    src="./assets/icons/measure.svg" width="50px" />
+            </div>
+
+            <div>
+                <input type="image" id="zoomIn" class="icon-button" (click)="measureArea()" tooltipPosition="left"
+                    src="./assets/icons/area.svg" width="50px" />
             </div>
 
         </div>
@@ -11,8 +46,8 @@
     <div class="tab-header-container">
         <div> {{ tabHeader }}</div>
         <div>
-            <button pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-plain p-button-text" 
-            (click)="closeTab()"></button>
+            <button *ngIf="!isAtom" pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-plain p-button-text"
+                (click)="closeTab()"></button>
         </div>
     </div>
 

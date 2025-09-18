@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import WMSCapabilities from 'ol/format/WMSCapabilities';
 import { Subject } from 'rxjs/internal/Subject';
 import { HttpService } from 'src/app/services/http.service';
@@ -38,7 +38,7 @@ import CircleStyle from 'ol/style/Circle';
   styleUrls: ['./wfs.component.scss']
 })
 export class WfsComponent implements OnInit {
-
+  @Input() url: string | null = null
 
   searchingWfs = false;
   hidden = true
@@ -67,7 +67,12 @@ export class WfsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if (this.url && this.url.includes("wfs")) {
+      setTimeout(() => {
+         this.urlWfs = this.url!
+        this.parseWfs(this.url!)
+      }, 0);
+    }
   }
 
   wfsInputChange() {
@@ -112,15 +117,14 @@ export class WfsComponent implements OnInit {
         `&REQUEST=getFeature` +
         `&VERSION=2.0.0` +
         `&srsName=EPSG:4326` +
-        `&typename=${layer.Name}` + 
+        `&typename=${layer.Name}` +
         `&outputFormat=${outputFormat}`
 
-      
+
       let that = this
       let isPolygon = false;
       var vectorSource = new Vector({
         format: new WFS({
-          //featureNS: 'ms',
           version: '2.0.0',
           gmlFormat: new GML32({
             srsName: 'EPSG:4326'
@@ -137,13 +141,12 @@ export class WfsComponent implements OnInit {
                 dataProjection: that.invertedCoordinates ? "EPSG:4326" : "inverted_EPSG:4326",
               }) as Feature<Geometry>[];
 
-              console.log(features)
-
-              if (features.length > 0) {
-                console.log(features[0].getGeometry()?.getType() )
-                isPolygon = features[0].getGeometry()?.getType() == 'Polygon'
-                console.log(isPolygon)
-              }
+              // Add WFS layer name, title, and group to each feature
+              features.forEach(f => {
+                f.set('layerName', layer.Name);
+                f.set('layerTitle', layer.Title);
+                f.set('layerGroup', that.wfsGroupTitle ? that.wfsGroupTitle + " [WFS]" : "WFS");
+              });
 
               vectorSource.addFeatures(features);
               success(features);
@@ -167,8 +170,8 @@ export class WfsComponent implements OnInit {
       let WFSLayer = new VectorLayer(
         {
           source: vectorSource,
-          style: function(feature) {
-            
+          style: function (feature) {
+
             let isPolygon = feature.getGeometry()?.getType() == 'Polygon'
 
             if (isPolygon) {
@@ -196,7 +199,7 @@ export class WfsComponent implements OnInit {
               }),
             })
           }
-      })
+        })
 
       childMapLayers.push(WFSLayer)
 
@@ -204,7 +207,7 @@ export class WfsComponent implements OnInit {
 
     // adding new layers a a group to legend
     let newLayerGroup: LayerGroupLegend = {
-      name: this.wfsGroupTitle ? this.wfsGroupTitle + " [WFS]": "WFS",
+      name: this.wfsGroupTitle ? this.wfsGroupTitle + " [WFS]" : "WFS",
       checked: true,
       expanded: false,
       childLayers: childLayers,
@@ -218,7 +221,7 @@ export class WfsComponent implements OnInit {
 
     if (existingLayerGroup) {
       //let filteredNewLayerGroup = this.filterChildLayers(newLayerGroup)
-  
+
       this.toastService.showMessageInfo("Ta grupa warstw już istnieje. Usuń istniejącą aby dodać ponownie.")
 
     } else {
@@ -253,7 +256,7 @@ export class WfsComponent implements OnInit {
     //throw new Error('Method not implemented.');
   }
   getOutputFormat(layer: any) {
-    
+
     let outputFormats = layer.OutputFormats || {}
     let formats = outputFormats['Format'] || outputFormats['wfs:Format'] || []
     console.log(formats)
@@ -263,7 +266,7 @@ export class WfsComponent implements OnInit {
       let backupFormat = 'text/xml; subtype=gml/3.2.1'
 
       for (let format of formats) {
-        if (format.toLowerCase() == 'text/xml; subtype=gml/3.2.1'){
+        if (format.toLowerCase() == 'text/xml; subtype=gml/3.2.1') {
           return format
         } else if ((format.toLowerCase() == 'text/xml; subtype=gml/3.1.1')) {
           return format
@@ -276,7 +279,7 @@ export class WfsComponent implements OnInit {
 
       return backupFormat
 
-    } 
+    }
     // if there is one format
     else {
       // return output format string 
@@ -287,7 +290,7 @@ export class WfsComponent implements OnInit {
         return 'text/xml; subtype=gml/3.2.1'
       }
     }
-    
+
     //throw new Error('Method not implemented.');
   }
 
@@ -321,7 +324,7 @@ export class WfsComponent implements OnInit {
         let featureTypeList = capabilities.FeatureTypeList || capabilities['wfs:FeatureTypeList'] || {}
         let featureList = featureTypeList.FeatureType || featureTypeList['wfs:FeatureType'] || []
 
-        if (!Array.isArray(featureList)){
+        if (!Array.isArray(featureList)) {
           featureList = [featureList]
         }
 

@@ -1,5 +1,5 @@
 <div [hidden]="hidden">
-    <div class="layers-container">
+    <div *ngIf="!isLoading; else loading" class="layers-container">
         <div *ngFor="let layerGroup of layers">
             <div class="layer-group">
                 <i [class]="layerGroup.expanded ? 'pi pi-angle-down expand-icon' : 'pi pi-angle-right expand-icon'"
@@ -33,3 +33,10 @@
         </div>
     </div>
 </div>
+
+<ng-template #loading>
+    <div class="loading-container">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2em;"></i>
+        <div>Ładowanie warstw...</div>
+    </div>
+</ng-template>

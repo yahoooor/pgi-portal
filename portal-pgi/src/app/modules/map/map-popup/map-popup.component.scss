@@ -1,0 +1,62 @@
+.map-popup-container {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  padding: 0;
+  min-width: 220px;
+  position: relative;
+  font-size: 14px;
+  animation: fadeIn 0.2s;
+}
+
+.map-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #d00;
+}
+
+.map-popup-content {
+  padding: 0 4px 4px 4px;
+}
+
+.coords {
+  margin-top: 8px;
+  color: #888;
+  font-size: 12px;
+}
+
+.map-popup-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid white;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.08));
+}
+
+.layer-info {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

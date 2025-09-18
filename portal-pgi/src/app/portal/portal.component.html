@@ -1,0 +1,38 @@
+<div class="header">
+    <img src="assets/images/lpgo_pgi.png" height="50px">
+    <img src="assets/images/logo.png" height="80px" style="margin-right: 20px;">
+
+    <div class="title">
+        <h1> Państwowy Instytut Geologiczny - Państwowy Instytut Badawczy </h1>
+    </div>
+</div>
+
+<div class="navbar">
+
+    <div (click)="goTo('')" class="navbar-item" [class.active]="!isAtom">
+        <span class="item-name"> Geoportal INSPIRE </span>
+    </div>
+
+    <div (click)="goTo('atom')" class="navbar-item" [class.active]="isAtom">
+        <span class="item-name"> ATOM </span>
+    </div>
+
+</div>
+
+<div class="page-content">
+    <p-toast></p-toast>
+
+    <p-dialog header="Podgląd błędu" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
+        [draggable]="false" [resizable]="false">
+
+        <pre><code [highlight]="code" style="font-size: 11px; width: 500px;"></code></pre>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="displayModal=false" label="Ok" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <div [ngStyle]="{'width': isAtom ? '44vw' : '100vw' }">
+        <app-map ></app-map>
+    </div>
+    <app-sliders [isAtom]="isAtom"></app-sliders>
+</div>

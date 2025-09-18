@@ -65,6 +65,7 @@ export const rightSliderLayout = 260
 })
 export class SlidersComponent implements AfterViewInit {
 
+  @Input() isAtom = false;  
   //@Input() map!: Map
 
   leftSliderWidth = 0
@@ -100,6 +101,7 @@ export class SlidersComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.rightSliderState = this.isAtom ? 'in' : 'out';
   }
 
   

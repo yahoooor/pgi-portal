@@ -1,4 +1,3 @@
-
 ::ng-deep {
     .p-input-icon-right > .p-inputtext {
         width: 310px;
@@ -11,6 +10,7 @@
         width: 24px;
     }
 }
+
 
 .container {
     color: black;
@@ -27,7 +27,6 @@
 
 
 .atom-results {
-    margin-top: 20px;
     color: #444444;
 
     .results-title{
@@ -83,4 +82,37 @@
 
 label {
     font-size: 14px;
+}
+
+
+.atom-form {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-start; // important: aligns top of value with title
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.form-title {
+  font-weight: 600;
+  color: #444;
+  min-width: 75px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+.form-value {
+  color: #222;
+  word-break: break-word;
+  flex: 1 1 0;
+  white-space: pre-line; // allows wrapping, preserves line breaks
+  line-height: 1.5;
 }

@@ -1,0 +1,33 @@
+<div class="map-popup-container" (click)="$event.preventDefault()">
+    <div class="map-popup-header">
+        <span></span>
+        <button class="close-btn" aria-label="Close" (click)="close($event)">&times;</button>
+    </div>
+    <div class="map-popup-content">
+
+        <p-accordion [activeIndex]="0">
+            <ng-container *ngFor="let layer of layersInfo">
+                <p-accordionTab [header]="layer.layerTitle" *ngIf="layer.id">
+                    <div class="layer-info">
+                        <div>
+                            <b>ID:</b>
+                            {{layer.id}}
+                        </div>
+                        <div>
+                            <b>Nazwa:</b>
+                            {{layer.layerName}}
+                        </div>
+                        <div>
+                            <b>Grupa:</b>
+                            {{layer.layerGroup}}
+                        </div>
+                    </div>
+                </p-accordionTab>
+            </ng-container>
+
+
+        </p-accordion>
+
+    </div>
+    <div class="map-popup-arrow"></div>
+</div>

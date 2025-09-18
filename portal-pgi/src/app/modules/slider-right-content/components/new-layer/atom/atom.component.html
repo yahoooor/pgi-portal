@@ -1,54 +1,184 @@
-<div class="service-title">
-    Adres usługi ATOM:
-</div>
-<div>
-    <span class="p-input-icon-right">
-        <i *ngIf="searchingAtom" class="pi pi-spin pi-spinner"></i>
-        <input type="text" pInputText [(ngModel)]="urlAtom" (ngModelChange)=atomInputChange() />
-    </span>
-    <span style="margin-left: 5px;">
-        <i *ngIf="urlAtom" class="pi pi-times" (click)="cancelSearching(); urlAtom=''"></i>
-    </span>
-</div>
-
-<br>
-<div>
-    <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false"
-        [(ngModel)]="invertedCoordinates"></p-checkbox>
-    <label [for]="'coords'"> Zamień współrzędne</label>
-</div>
-
-<div class="atom-results">
-    <div class="results-title">
-        <strong *ngIf="atomGroupTitle">{{ atomGroupTitle }}:</strong>
+<div style="height: 640px; overflow: auto;">
+    <div class="service-title">
+        Adres usługi ATOM:
     </div>
-
-    <div class="results-container">
-        <div *ngFor="let atomEntry of atomEntries; let i = index" class="result-item">
-            <!--
-                <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
-            -->
-            <p-button class="download-icon" icon="pi pi-eye" [disabled]="!(atomEntry.type == 'application/x-shapefile' && fileSize > 0 && fileSize < 10000000)"
-                [loading]="atomEntry.sizeLoading" [pTooltip]="atomEntry.sizeLoading ? 'Trwa pobieranie wielkości pliku' : fileSize | filesize" tooltipPosition="left"
-                (click)="addLayer(atomEntry)"></p-button>
-            <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading"
-                (click)="downloadAtom($event, atomEntry)"></p-button>
-
-
-            <div class="layer-result">{{ atomEntry.title }} <br> <b><i>{{ atomEntry.type}}</i> | {{ atomEntry.category
-                    }}</b></div>
-        </div>
+    <div>
+        <span class="p-input-icon-right" style="width: 96%;">
+            <i *ngIf="searchingAtom" class="pi pi-spin pi-spinner"></i>
+            <input style="width: 100%;" type="text" pInputText [(ngModel)]="urlAtom"
+                (ngModelChange)=atomInputChange() />
+        </span>
+        <span style="margin-left: 5px;">
+            <i *ngIf="urlAtom" class="pi pi-times" (click)="cancelSearching(); urlAtom=''"></i>
+        </span>
     </div>
 
     <br>
-    <div class="note-info">
-        <i>Na mapie można wyświetlić zbiory danych GML o rozmiarze poniżej 10MB. W celu przeglądania pozostałych zbiorów
-            prosimy o pobranie pliku i wykorzystanie desktopowych narzędzi GIS.</i>
-    </div>
-</div>
 
-<!--
+    <div>
+        <p-checkbox [inputId]="'coords'" [binary]="true" name="groupname" [value]="false"
+            [(ngModel)]="invertedCoordinates"></p-checkbox>
+        <label [for]="'coords'"> Zamień współrzędne</label>
+    </div>
+
+    <br>
+
+    <div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+                <div *ngIf="feed">
+                    <div class="atom-form">
+                        <div class="atom-results">
+                            <div class="results-title">
+                                <strong>Podstawowe informacje:</strong>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class="form-title">Tytuł:</div>
+                            <div class="form-value">{{ feed.title}}</div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-title">Opis:</div>
+                            <div class="form-value">{{ feed.subtitle}}</div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-title">Aktualizacja:</div>
+                            <div class="form-value">{{ feed.updated}}</div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-title">Autor:</div>
+                            <div class="form-value">
+                                <div>
+                                    {{ feed.author?.name}}
+                                </div>
+                                <a href="mailto:{{ feed.author?.email}}">
+                                    {{ feed.author?.email}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <ng-container *ngFor="let entry of feed.entries">
+                        <br>
+                        <div class="atom-form">
+                            <div class="atom-results">
+                                <div class="results-title">
+                                    <strong>{{ entry.title }}</strong>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-row">
+                                <div class="form-title">Tytuł:</div>
+                                <div class="form-value">{{ entry.title}}</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Opis:</div>
+                                <div class="form-value">{{ entry.summary}}</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Aktualizacja:</div>
+                                <div class="form-value">{{ entry.updated}}</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Autor:</div>
+                                <div class="form-value">
+                                    <div>
+                                        {{ entry.author?.name}}
+                                    </div>
+                                    <a href="mailto:{{ entry.author?.email}}">
+                                        {{ entry.author?.email}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Kategorie:</div>
+                                <div class="form-value">
+                                    <div *ngFor="let category of entry.categories">
+                                        {{ category.label }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Linki:</div>
+                                <div class="form-value">
+                                    <div *ngFor="let link of entry.links">
+                                        <a [href]="link.href">{{link.title}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">Geometria:</div>
+                                <div class="form-value">
+                                    {{entry.geometry}}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+            <div *ngIf="feed">
+                <div class="atom-results atom-form">
+                    <div class="results-title">
+                        <strong>Dane z usługi ATOM:</strong>
+                    </div>
+
+                    <div class="results-container">
+                        <div *ngFor="let atomEntry of atomEntries; let i = index" class="result-item">
+                            <!--
+                <p-checkbox [binary]="true" name="groupname" [value]="false" [(ngModel)]="atomEntry.isSelected" (onChange)="onLayerCheckboxChange($event, atomEntry)"></p-checkbox>
+            -->
+                            <p-button class="download-icon" icon="pi pi-eye"
+                                [disabled]="!(['application/x-shapefile', 'application/gml+xml'].includes(atomEntry.type) && atomEntry.contentSize > 0 && atomEntry.contentSize < 10000000)"
+                                [loading]="atomEntry.sizeLoading"
+                                [pTooltip]="atomEntry.sizeLoading ? 'Trwa pobieranie wielkości pliku' : atomEntry.contentSize | filesize"
+                                tooltipPosition="left" (click)="addLayer(atomEntry)"></p-button>
+                            <p-button class="download-icon" icon="pi pi-download" [loading]="atomEntry.isLoading"
+                                (click)="downloadAtom($event, atomEntry)"></p-button>
+
+
+                            <div class="layer-result">{{ atomEntry.title }} <br> <b><i>{{ atomEntry.type}}</i> | {{
+                                    atomEntry.category
+                                    }}</b></div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="note-info">
+                        <i>Na mapie można wyświetlić zbiory danych GML o rozmiarze poniżej 10MB. W celu przeglądania
+                            pozostałych zbiorów
+                            prosimy o pobranie pliku i wykorzystanie desktopowych narzędzi GIS.</i>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="atom-form">
+                    <div class="atom-results">
+                        <div class="results-title">
+                            <strong>Linki zewnętrzne:</strong>
+                        </div>
+                    </div>
+                    <br>
+                    <div *ngFor="let link of feed.links" class="form-row">
+                        <div class="form-value"><a>
+                                {{ link.title }}:
+                                <a href="{{ link.href }}" target="_blank">{{ link.href }}</a>
+                            </a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--
 <div *ngIf="atomEntries.length" class="result-button">
     <button pButton type="button" label="DODAJ" class="p-button-rounded" (click)="addLayers()"></button>
 </div>
 -->
+</div>

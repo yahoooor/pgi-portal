@@ -1,0 +1,95 @@
+//@import url('https://db.onlinewebfonts.com/c/33f225b8f5f7d6b34a0926f58f96c1e9?family=Open+Sans+Semibold');
+//@import url('https://db.onlinewebfonts.com/c/629a55a7e793da068dc580d184cc0e31?family=Open+Sans');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap");
+@font-face {
+    font-family: "open-sans-semibold";
+    src: url("../../assets/fonts/opensans/OpenSans-Semibold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+.header {
+    height: 60px;
+    background: #d3d8dd;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    //position: fixed;
+    //width: 100%;
+    //z-index: 10000;
+}
+
+.navbar {
+    height: 40px;
+    background: #d3d8dd;
+
+    display: flex;
+    flex-direction: row;
+    //align-items: center;
+    gap: 10px;
+    padding-top: 3px;
+    padding-left: 20px;
+
+    .navbar-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+
+        background: #e6e6e6; // lighter, more discrete
+        color: #222;
+        font-family: "Open Sans"; //, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        padding: 0px 12px 3px 12px;
+
+        cursor: pointer;
+        &.active {
+            background: #566978;
+            color: #fff;
+            border-bottom: none;
+        }
+        &:hover {
+            background: #566978;
+            color: #fff;
+            border-bottom: none;
+        }
+    }
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: "open-sans-semibold", sans-serif;
+    color: #000;
+
+    h1 {
+        font-size: 24px;
+    }
+}
+
+.subtitle {
+    font-size: 28px;
+    font-weight: 600;
+    font-family: "open-sans-semibold", sans-serif;
+    color: #000;
+
+    margin-left: 161px;
+    margin-top: -10px;
+}
+
+.page-content {
+    max-height: calc(100% - 100px);
+}
+
+::ng-deep {
+    .p-button.p-button-text {
+        color: #444444;
+    }
+
+    .p-button.p-button-text:enabled:hover {
+        color: #444444;
+    }
+}

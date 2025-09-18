@@ -1,2 +1,9 @@
 <div id="map" class="map"></div>
-
+<div id="map-popup">
+  <app-map-popup
+    [layersInfo]="popupLayersInfo"
+    [visible]="popupVisible"
+    [coordinates]="popupCoordinates"
+    (close)="hidePopup()"
+  ></app-map-popup>
+</div>

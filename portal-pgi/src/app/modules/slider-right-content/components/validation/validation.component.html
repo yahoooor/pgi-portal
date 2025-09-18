@@ -1,19 +1,19 @@
 <div [hidden]="hidden">
     <div class="container">
         <p-accordion styleClass="custom-accordion">
-            <p-accordionTab header="Usługa WMS">
+            <p-accordionTab  *ngIf="!isAtom" header="Usługa WMS">
                 <app-wms-validation></app-wms-validation>
             </p-accordionTab>
 
-            <p-accordionTab header="Usługa WFS">
+            <p-accordionTab   *ngIf="!isAtom" header="Usługa WFS">
                 <app-wfs-validation></app-wfs-validation>
             </p-accordionTab>
 
-            <p-accordionTab header="Usługa ATOM">
+            <p-accordionTab *ngIf="isAtom" header="Usługa ATOM">
                 <app-atom-validation></app-atom-validation>
             </p-accordionTab>
 
-            <p-accordionTab header="Usługa CSW">
+            <p-accordionTab *ngIf="!isAtom" header="Usługa CSW">
                 <app-csw-validation></app-csw-validation>
             </p-accordionTab>
 

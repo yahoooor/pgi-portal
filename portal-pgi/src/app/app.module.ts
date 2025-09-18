@@ -12,11 +12,16 @@ import { SlidersModule } from './sliders/sliders.module';
 import {DialogModule} from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { HighlightModule } from 'ngx-highlightjs';
+import { MapPopupComponent } from './modules/map/map-popup/map-popup.component';
+import { AccordionModule } from 'primeng/accordion';
+import { PortalComponent } from './portal/portal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    MapPopupComponent,
+    PortalComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +32,8 @@ import { HighlightModule } from 'ngx-highlightjs';
     TabsModule,
     DialogModule,
     ButtonModule,
-    HighlightModule
+    HighlightModule,
+    AccordionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

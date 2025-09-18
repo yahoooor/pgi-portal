@@ -32,5 +32,5 @@
 </div>
 
 <div *ngIf="wmsLayers.length" class="result-button">
-    <button pButton type="button" label="DODAJ" class="p-button-rounded" (click)="addLayers()"></button>
+    <button pButton type="button" label="DODAJ" class="p-button-rounded" (click)="addLayers(selectedLayers, urlWms, wmsGroupTitle)"></button>
 </div>

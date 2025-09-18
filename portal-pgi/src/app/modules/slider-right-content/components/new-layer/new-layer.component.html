@@ -1,19 +1,21 @@
 <div [hidden]="hidden">
-    <div class="container">
-        <p-accordion styleClass="custom-accordion">
-            <p-accordionTab header="Usługa WMS">
-                <app-wms></app-wms>
-            </p-accordionTab>
+    <div class="container" >
+        <p-accordion styleClass="custom-accordion" [activeIndex]="activeIndex">
+            <ng-container *ngIf="!isAtom">
+                <p-accordionTab header="Usługa WMS">
+                    <app-wms [url]="url" ></app-wms>
+                </p-accordionTab>
 
-            <p-accordionTab header="Usługa WFS">
-                <app-wfs></app-wfs>
-            </p-accordionTab>
+                <p-accordionTab header="Usługa WFS">
+                    <app-wfs [url]="url"></app-wfs>
+                </p-accordionTab>
+            </ng-container>
 
-            <p-accordionTab header="Usługa ATOM">
-                <app-atom></app-atom>
+
+            <p-accordionTab *ngIf="isAtom" header="Usługa ATOM">
+                <app-atom [url]="url"></app-atom>
             </p-accordionTab>
 
         </p-accordion>
     </div>
 </div>
-

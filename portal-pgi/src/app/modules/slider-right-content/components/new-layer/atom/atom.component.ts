@@ -1,7 +1,7 @@
 import { identifierModuleUrl } from '@angular/compiler';
-import { Component, OnInit, setTestabilityGetter } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Component, Input, OnInit, setTestabilityGetter } from '@angular/core';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { HttpService } from 'src/app/services/http.service';
 import { MapService } from 'src/app/services/map.service';
 
@@ -31,6 +31,8 @@ import VectorSource from 'ol/source/Vector';
 import { HttpClient } from '@angular/common/http';
 
 import { saveAs } from 'file-saver';
+import { from } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 
 
@@ -53,6 +55,7 @@ interface AtomEntry {
   styleUrls: ['./atom.component.scss']
 })
 export class AtomComponent implements OnInit {
+  @Input() url: string | null = null 
 
   searchingAtom = false;
   urlAtom = "";
@@ -84,52 +87,40 @@ export class AtomComponent implements OnInit {
 
   ngOnInit(): void {
 
+    
+
     this.atomLinks$.subscribe(
       linkCount => {
-        console.log(linkCount)
-        console.log(this.linksArrSize)
         if (linkCount == this.linksArrSize) {
           setTimeout(() => {
-            this.atomEntries.forEach((element: AtomEntry) => {
-              console.log("GET SIZE: ", element)
+            from(this.atomEntries).pipe(
+              concatMap((element: AtomEntry) =>
+                this.http.getSize(element.url).pipe(
+                  // handle the response for each element
+                  // return an observable that completes after processing
+                  // so concatMap waits for each to finish
+                  // you can use tap for side effects
+                  // but here we use subscribe inside for clarity
+                  // or you can use map/tap if you prefer
+                  // but for simplicity, let's use subscribe here
+                  // but it's better to use tap
+                  // so let's use tap
+                  tap(data => {
+                    let contentSize = data.headers.get('content-length');
+                    element.contentSize = Number(contentSize);
+                    element.sizeLoading = false;
 
-              this.http.getSize(element.url).subscribe(
-                data => {
-                  let contentSize = data.headers.get('content-length')
-                  element.contentSize = Number(contentSize)
-                  element.sizeLoading = false
-
-                  if (element.contentSize > 0) {
-                    this.fileSize = element.contentSize
-                  }
-
-                  /*
-                  if (element.contentSize <= 5000000 || element.type == "application/x-shapefile") {
-
-                    element.disabled = false
-                  }*/
-                },
-                error => {
-                  element.sizeLoading = false
-                }
+                    if (element.contentSize > 0) {
+                      this.fileSize = element.contentSize;
+                    }
+                  }),
+                  catchError(error => {
+                    element.sizeLoading = false;
+                    return of(null);
+                  })
+                )
               )
-              /*
-              this.http.getFileSize(element.url).then(
-                contentSize => {
-                  element.contentSize = Number(contentSize)
-                  element.sizeLoading = false
-                }
-              ).catch(erorr => {
-                this.searchingAtom = false
-              })
-
-              if (element.type == "application/gml+xml" &&
-                element.contentSize <= 5000000 &&
-                element.category == "EPSG:4326") {
-
-                element.disabled = false
-              } */
-            });
+            ).subscribe();
 
           }, 300);
 
@@ -144,6 +135,7 @@ export class AtomComponent implements OnInit {
   }
 
   parseAtom(url: string) {
+    this.mapService.clearAtomLayers()
 
     if (url == '' || url == " ") {
       return
@@ -162,6 +154,7 @@ export class AtomComponent implements OnInit {
         const xml = parser.parseFromString(dataXML, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
         console.log(obj)
+        this.setAtomInfo(obj)
 
         console.log(findAllByKey(obj, "entry"))
 
@@ -179,6 +172,7 @@ export class AtomComponent implements OnInit {
         }
         this.linksArrSize = entries.length
 
+
         this.getAtomLinks(this.atomLinks)
 
 
@@ -191,6 +185,28 @@ export class AtomComponent implements OnInit {
         this.searchingAtom = false
       }
     )
+  }
+
+  feed: ParsedAtomFeed | null = null;
+  private setAtomInfo(obj: any): void {
+    this.feed = parseAtomFeed(obj)
+    const coordsArr = this.feed?.entries.map(entry => {
+      const stringCoordsArr: number[][] = entry.geometry
+        ? entry.geometry
+        .trim()
+        .split(/\s+/)
+        .map(Number)
+        .reduce((pairs: number[][], val: number, idx: number, arr: number[]) => {
+          if (idx % 2 === 0 && arr[idx + 1] !== undefined) {
+            pairs.push([arr[idx + 1], val]);
+          }
+          return pairs;
+        }, [])
+        : [];
+      return stringCoordsArr;
+    })
+    console.log(coordsArr)
+    this.mapService.setAtomLayers(coordsArr || [])
   }
 
   getAtomLinks(atomLinks: any) {
@@ -236,7 +252,6 @@ export class AtomComponent implements OnInit {
 
             this.atomEntries.push(tempAtomEntry)
             this.searchingAtom = false
-            console.log(tempAtomEntry)
 
             linkCounter++
             this.atomLinks$.next(linkCounter)
@@ -249,7 +264,6 @@ export class AtomComponent implements OnInit {
   }
 
   downloadAtom(evt: any, atomEntry: AtomEntry) {
-    console.log(atomEntry)
 
     atomEntry.isLoading = true
 
@@ -259,8 +273,8 @@ export class AtomComponent implements OnInit {
     
     this.http.downloadFile(atomEntry.url!).subscribe(
       (data: any) => {
-        console.log(data)
 
+        
         //let blob = new Blob([data], { type: atomEntry.type });
         var downloadURL = window.URL.createObjectURL(data);
         var link = document.createElement('a');
@@ -317,7 +331,6 @@ export class AtomComponent implements OnInit {
         layer.sizeLoading = false;
 
         data.forEach((geojson: any) => {
-          console.log(geojson)
           let index = 0
           let childLayers: LayerLegend[] = []
           let childMapLayers: Layer[] = []
@@ -417,7 +430,6 @@ export class AtomComponent implements OnInit {
 
           // return all layers
           this.mapService.map.getLayers().forEach(layer => {
-            console.log(layer)
           })
           // vectorSource.addFeature(new Feature(new Circle()));
 
@@ -431,16 +443,14 @@ export class AtomComponent implements OnInit {
   addLayer(layer: AtomEntry) {
 
     // if (layer.disabled) { return }
-    if (!(layer.type == 'application/x-shapefile' && this.fileSize > 0 && this.fileSize < 10000000)) { return}
-    console.log(layer)
+    if (!(['application/x-shapefile', 'application/gml+xml'].includes(layer.type) && this.fileSize > 0 && this.fileSize < 10000000)) { return}
 
-    if (layer.type == "application/x-shapefile") {
+    if (['application/x-shapefile'].includes(layer.type)) {
       console.log("GETTING FROM SHAPEFILE", layer.url)
       this.getFromShapefile(layer)
       return
     }
-
-
+    
 
     let index = 0
     let childLayers: LayerLegend[] = []
@@ -471,7 +481,6 @@ export class AtomComponent implements OnInit {
 
     let that = this
 
-    console.log(childLayer)
 
     let vectorSource: any
 
@@ -598,3 +607,105 @@ function getFeature(geometry: any) {
 
   return feature
 }
+
+export interface AtomAuthor {
+  name?: string;
+  email?: string;
+}
+
+export interface AtomLink {
+  rel?: string;
+  href?: string;
+  title?: string;
+  type?: string;
+}
+
+export interface AtomCategory {
+  label?: string;
+  term?: string;
+}
+
+export interface AtomEntry1 {
+  title?: string;
+  id?: string;
+  summary?: string;
+  updated?: string;
+  rights?: string;
+  author?: AtomAuthor;
+  links: AtomLink[];
+  categories: AtomCategory[];
+  datasetIdentifier?: {
+    namespace?: string;
+    code?: string;
+  };
+  geometry?: string;
+}
+
+export interface ParsedAtomFeed {
+  title?: string;
+  subtitle?: string;
+  id?: string;
+  updated?: string;
+  rights?: string;
+  author?: AtomAuthor;
+  links: AtomLink[];
+  entries: AtomEntry1[];
+}
+
+export function parseAtomFeed(feedJson: any): ParsedAtomFeed {
+  const feed = feedJson?.feed ?? {};
+
+  const result: ParsedAtomFeed = {
+    title: feed.title,
+    subtitle: feed.subtitle,
+    id: feed.id,
+    updated: feed.updated,
+    rights: feed.rights,
+    author: {
+      name: feed.author?.name,
+      email: feed.author?.email,
+    },
+    links: (feed.link ?? []).map((l: any) => ({
+      rel: l["@attributes"]?.rel,
+      href: l["@attributes"]?.href,
+      title: l["@attributes"]?.title,
+      type: l["@attributes"]?.type,
+    })),
+    entries: [],
+  };
+
+  let entries = feed.entry ?? [];
+  if (!Array.isArray(entries)) {
+    entries = [entries];
+  }
+
+  result.entries = entries.map((entry: any): AtomEntry1 => ({
+    title: entry.title,
+    id: entry.id,
+    summary: entry.summary,
+    updated: entry.updated,
+    rights: entry.rights,
+    author: {
+      name: entry.author?.name,
+      email: entry.author?.email,
+    },
+    links: (entry.link ?? []).map((l: any) => ({
+      rel: l["@attributes"]?.rel,
+      href: l["@attributes"]?.href,
+      title: l["@attributes"]?.title,
+      type: l["@attributes"]?.type,
+    })),
+    categories: (entry.category ?? []).map((c: any) => ({
+      label: c["@attributes"]?.label,
+      term: c["@attributes"]?.term,
+    })),
+    datasetIdentifier: {
+      namespace: entry["inspire_dls:spatial_dataset_identifier_namespace"],
+      code: entry["inspire_dls:spatial_dataset_identifier_code"],
+    },
+    geometry: entry["georss:polygon"],
+  }));
+
+  return result;
+}
+
