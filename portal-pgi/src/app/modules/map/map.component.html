@@ -1,9 +1,42 @@
 <div id="map" class="map"></div>
 <div id="map-popup">
-  <app-map-popup
-    [layersInfo]="popupLayersInfo"
-    [visible]="popupVisible"
-    [coordinates]="popupCoordinates"
-    (close)="hidePopup()"
-  ></app-map-popup>
+  <app-map-popup [layersInfo]="popupLayersInfo" [visible]="popupVisible" [coordinates]="popupCoordinates"
+    (close)="hidePopup()"></app-map-popup>
+</div>
+
+<div class="outside">
+  <div class="btn-group">
+    <div>
+      <input type="image" class="icon-button" (click)="increaseZoom()" [pTooltip]="'Przybliż'"
+        src="./assets/icons-new/zoom-in-icon.svg"  />
+    </div>
+
+    <div>
+      <input type="image" class="icon-button" tooltipPosition="right" (click)="decreaseZoom()" [pTooltip]="'Oddal'"
+        src="./assets/icons-new/zoom-out-icon.svg"  />
+    </div>
+
+    <div class="icon-layout">
+      <input type="image" class="icon-button" tooltipPosition="right" (click)="goBackPosition()" [pTooltip]="'Poprzedni widok'"
+        src="./assets/icons-new/arrow-left-icon.svg"  />
+
+    </div>
+
+
+    <div>
+      <input type="image" class="icon-button" tooltipPosition="right" (click)="goForwardPosition()" [pTooltip]="'Następny widok'"
+        src="./assets/icons-new/arrow-right-icon.svg"  />
+    </div>
+
+    <div>
+      <input type="image" class="icon-button" (click)="measureDistance()" tooltipPosition="right" [pTooltip]="'Pomiar odległości'"
+        src="./assets/icons-new/measure-icon.svg"  />
+    </div>
+
+    <div>
+      <input type="image" class="icon-button" (click)="measureArea()" tooltipPosition="right" [pTooltip]="'Pomiar powierzchni'" 
+        src="./assets/icons-new/polygon-icon.svg" />
+    </div>
+
+  </div>
 </div>

@@ -15,6 +15,7 @@ import { HighlightModule } from 'ngx-highlightjs';
 import { MapPopupComponent } from './modules/map/map-popup/map-popup.component';
 import { AccordionModule } from 'primeng/accordion';
 import { PortalComponent } from './portal/portal.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PortalComponent } from './portal/portal.component';
     DialogModule,
     ButtonModule,
     HighlightModule,
-    AccordionModule
+    AccordionModule,
+    TooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

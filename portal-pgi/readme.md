@@ -1,0 +1,1 @@
+scp -P 22023 -r dist wizipisi@192.168.100.103:/home/wizipisi/PIG/Portal

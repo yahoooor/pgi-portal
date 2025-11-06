@@ -167,7 +167,10 @@ export class MapService {
               evt.coordinate,
               viewResolution!,
               view.getProjection(),
-              { 'INFO_FORMAT': 'text/xml' }
+              {
+                'INFO_FORMAT': 'text/xml',
+                'FEATURE_COUNT': '10'
+              }
             );
             if (url) {
               fetchPromises.push(
@@ -178,32 +181,47 @@ export class MapService {
                     const xml = parser.parseFromString(xmlText, 'text/xml');
                     const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
 
-                    // Robustly extract gml:identifier regardless of the feature type key
-                    let id: string | undefined;
                     try {
-                      const featureMember = obj?.FeatureCollection?.['gml:featureMember'];
-                      if (featureMember && typeof featureMember === 'object') {
-                        // Get the first key (e.g., "ge:MappedFeature", "other:FeatureType", etc.)
-                        const featureTypeKey = Object.keys(featureMember).find(k => k !== '#text' && k !== '@attributes');
-                        if (featureTypeKey) {
-                          id = featureMember[featureTypeKey]?.['gml:identifier'];
-                        }
+                      const featureMembers = obj?.FeatureCollection?.['gml:featureMember'];
+                      if (featureMembers) {
+                        const members = Array.isArray(featureMembers) ? featureMembers : [featureMembers];
+                        members.forEach((member: any) => {
+                          // Get the actual feature object inside the featureMember (could be ge:Something, etc.)
+                          const featureTypeKey = Object.keys(member).find(k => k !== '#text' && k !== '@attributes');
+                          const featureObj = featureTypeKey ? member[featureTypeKey] : member;
+
+                          // Extract identifier robustly
+                          let id: string | undefined = undefined;
+                          try {
+                            let rawId = featureObj?.['gml:identifier'];
+                            if (typeof rawId === 'string') {
+                              id = rawId;
+                            } else if (rawId && typeof rawId === 'object') {
+                              // handle cases like { '#text': 'value' } or other wrappers
+                              id = rawId['#text'] ?? rawId['@content'] ?? rawId['@attributes'] ?? JSON.stringify(rawId);
+                            }
+                          } catch {
+                            id = undefined;
+                          }
+
+                          console.log(layer);
+
+                          layersInfo.push({
+                            type: 'wms',
+                            layerGroup: l.values_?.layerName,
+                            layerTitle: layer.get('title'),
+                            layerName: layer.get('name'),
+                            id,
+                            data: featureObj
+                          });
+                        });
                       }
-                    } catch { id = undefined; }
-
-                    console.log(layer)
-
-                    layersInfo.push({
-                      type: 'wms',
-                      layerGroup: l.values_?.layerName,
-                      layerTitle: layer.get('title'),
-                      layerName: layer.get('name'),
-                      id,
-                      data: obj
-                    });
+                    } catch (e) {
+                      // ignore parse errors for this response
+                    }
                   })
                   .catch(error => {
-
+                    // ignore fetch errors for now
                   })
               );
             }

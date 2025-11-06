@@ -1,20 +1,29 @@
 <div class="header">
-    <img src="assets/images/lpgo_pgi.png" height="50px">
-    <img src="assets/images/logo.png" height="80px" style="margin-right: 20px;">
+    <div class="header-inner" style="display:flex; align-items:center; padding:0; margin-top: 4px; margin-bottom: 4px;">
+        
+        <img src="./assets/images/pig-logo.png" alt="Państwowy Instytut Geologiczny" width="300"
+            style="margin-right:32px; object-fit:contain;" />
 
-    <div class="title">
-        <h1> Państwowy Instytut Geologiczny - Państwowy Instytut Badawczy </h1>
+    </div>
+    <div class="header-inner" style="display:flex; align-items:center; width:100%; margin:32px auto 16px; padding:0; margin-top: 20px;">
+        <img src="https://ogcapi.pgi.gov.pl/static/img/logo.png" alt="Państwowy Instytut Geologiczny" width="80"
+            style="margin-right:16px; object-fit:contain;" />
+        <div class="header-title jost">
+            <div style="font-weight:400; font-size:18px; color:#2d3748;">
+                Państwowy Instytut Geologiczny<br>Państwowy Instytut Badawczy
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="navbar">
+<div class="navbar jost">
 
     <div (click)="goTo('')" class="navbar-item" [class.active]="!isAtom">
-        <span class="item-name"> Geoportal INSPIRE </span>
+        <span class="item-name"> GEOPORTAL INSPIRE </span>
     </div>
 
     <div (click)="goTo('atom')" class="navbar-item" [class.active]="isAtom">
-        <span class="item-name"> ATOM </span>
+        <span class="item-name"> KLIENT USŁUG ATOM </span>
     </div>
 
 </div>
@@ -32,7 +41,7 @@
     </p-dialog>
 
     <div [ngStyle]="{'width': isAtom ? '44vw' : '100vw' }">
-        <app-map ></app-map>
+        <app-map></app-map>
     </div>
     <app-sliders [isAtom]="isAtom"></app-sliders>
 </div>

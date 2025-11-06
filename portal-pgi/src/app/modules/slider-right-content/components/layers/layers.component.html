@@ -6,7 +6,7 @@
                     (click)="toggleLayerGroup(layerGroup)"></i>
                 <p-checkbox [(ngModel)]="layerGroup.checked" [binary]="true" [inputId]="layerGroup.name"
                     (onChange)="layerGroupVisibilityChange($event, layerGroup)"></p-checkbox>
-                <label style="flex-grow: 1;" [for]="layerGroup.name">{{layerGroup.name}}</label>
+                <label class="label-group" style="flex-grow: 1;" [for]="layerGroup.name">{{layerGroup.name}}</label>
                 <span style="cursor: pointer;">
                     <i class="pi pi-times" (click)="deleteLayerGroup(layerGroup)"></i>
                 </span>
@@ -18,8 +18,8 @@
                         <i [class]="childLayer.expanded ? 'pi pi-angle-down expand-icon' : 'pi pi-angle-right expand-icon'"
                             (click)="toggleChildLayer(childLayer)"></i>
                         <p-checkbox [(ngModel)]="childLayer.checked" [binary]="true" [inputId]="childLayer.name"
-                            (onChange)="childLayerVisibilityChange($event, childLayer)"></p-checkbox>
-                        <label style="word-break: break-word;">{{childLayer.name}}</label>
+                            (onChange)="childLayerVisibilityChange($event, childLayer, layerGroup)"></p-checkbox>
+                        <label class="label-item" style="word-break: break-word;">{{childLayer.name}}</label>
 
                     </div>
 

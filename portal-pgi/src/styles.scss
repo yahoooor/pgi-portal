@@ -42,7 +42,7 @@ html {
 /* buttons */
 .p-button {
     color: #fff;
-    background: #566978;
+    background: #666666;
     border: none;
     text-decoration: none;
     box-shadow: none;
@@ -89,7 +89,7 @@ html {
     height: 20px;
 }
 .p-checkbox .p-checkbox-box {
-    border: 1px solid #566978;
+    border: 1px solid #666666;
     background: #fff;
     width: 20px;
     height: 20px;
@@ -103,21 +103,21 @@ html {
     font-size: 13px;
 }
 .p-checkbox .p-checkbox-box.p-highlight {
-    border-color: #566978;;
-    background: #566978;
+    border-color: #666666;
+    background: #666666;
 }
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
-    border-color: #566978;
+    border-color: #666666;
 }
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
     outline: 0 none;
     outline-offset: 0;
     box-shadow: 0 0 0 0px #fff;
-    border-color: #566978;
+    border-color: #666666;
 }
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
-    border-color: #566978;
-    background: #566978;
+    border-color: #666666;
+    background: #666666;
     color: #fff;
 }
 

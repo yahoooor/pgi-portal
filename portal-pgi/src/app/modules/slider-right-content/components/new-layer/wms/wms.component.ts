@@ -16,6 +16,7 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { ToastService } from 'src/app/services/toast.service';
 import { forkJoin, from } from 'rxjs';
 import { LayerService } from 'src/app/services/layer.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-wms',
   templateUrl: './wms.component.html',
@@ -39,6 +40,7 @@ export class WmsComponent implements OnInit {
   constructor(private http: HttpService,
     private toast: ToastService,
     private layerService: LayerService,
+    private httpClient: HttpClient,
     private mapService: MapService) {
     this.urlWmsChanged.pipe(
       tap(url => {
@@ -62,67 +64,54 @@ export class WmsComponent implements OnInit {
 
   private initWmsLayers() {
     this.layerService.isLoading$.next(true)
-    let wmsLinks = [
-      "https://inspire.pgi.gov.pl/ows/services/org.2.d181a629-132b-45b3-81da-10814ff9ce2b_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.a6930dcf-64dc-421a-ac59-7d1c7c3a84ad_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.75c0da71-b455-41fe-89bb-fae156c62e17_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.739e60a6-059d-4246-8e8a-4cb856ad0784_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.e02fe07f-91ea-448d-b731-beb982a8f4cb_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.72b53987-c36a-47b6-b321-9abe530eca8a_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.b3b0a215-31a2-463f-af4c-670d92b68ad2_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.9bc9929c-5baf-4bed-8a1a-a58339d34497_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.491a443d-42a3-49da-922a-803b81cd76b7_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.3b0c28ef-4bab-450e-a2ba-07c1328eb96c_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.4286d8f8-bb71-4aba-a2ef-9cf98427d05c_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.6344e311-13ab-44db-952a-2c724c463cbc_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.b31d2b65-3e95-4f70-bb28-91b0a65bb882_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.ee0c16bf-3bd4-4247-b851-9444be5b0421_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.9e7f1a45-86ae-44a6-963f-4592720fb03f_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.d0968a75-d777-4192-9384-37fff9f1ce5e_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.8fa68a12-0a52-461c-a462-09a7348e4122_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.7f07948a-7a9f-451c-9e96-adc4731b6e96_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.aa52bae1-de73-41a6-970a-e26f72bd504d_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.35fdd20b-29ab-466c-9329-7b8d2ef7203f_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.d6dd2cff-c33a-4450-8efd-5d95cfd789d6_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-      "https://inspire.pgi.gov.pl/ows/services/org.2.d7863626-7899-4852-ba22-af57daa4c5a4_wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",
-    ]
+    let wmsLinks: string[] = []
+
+
+
 
     const parser = new WMSCapabilities();
 
-    from(wmsLinks).pipe(
-      concatMap((wmsLink, index) =>
-        this.http.getCapabilities(wmsLink).pipe(
-          map((data) => ({
-            data, wmsLink, index
-          }))
+    this.httpClient.get<string[]>('./assets/portal.json').subscribe(links => {
+      wmsLinks = links
+
+      from(wmsLinks).pipe(
+        concatMap((wmsLink, index) =>
+          this.http.getCapabilities(wmsLink).pipe(
+            map((data) => ({
+              data, wmsLink, index
+            }))
+          )
         )
-      )
-    ).subscribe({
-      next: (r) => {
-        console.log(r.wmsLink)
-        let wmsData = parser.read(r.data);
-        let wmsGroupTitle = wmsData.Service.Title;
-        let wmsLayers = wmsData.Capability.Layer.Layer as any[];
-        if (wmsLayers) {
-          console.log(wmsData)
-          wmsLayers.forEach(item => item.isSelected = false);
+      ).subscribe({
+        next: (r) => {
+          console.log(r.wmsLink)
+          let wmsData = parser.read(r.data);
+          let wmsGroupTitle = wmsData.Service.Title;
+          let wmsLayers = wmsData.Capability.Layer.Layer as any[];
+          if (wmsLayers) {
+            console.log(wmsData)
+            wmsLayers.forEach(item => item.isSelected = false);
 
-          const enabledParent = true
-          const enabled = r.index === 0 ? true : false
+            const enabledParent = r.index === 0 ? true : false
+            const enabled = r.index === 0 ? true : false
 
-          this.addLayers(wmsLayers, r.wmsLink, wmsGroupTitle, enabledParent, enabled, false, r.index === 0 ? true : false);
+            this.addLayers(wmsLayers, r.wmsLink, wmsGroupTitle, enabledParent, enabled, false, r.index === 0 ? true : false);
 
+          }
+        },
+        error: (error) => {
+          this.searchingWms = false;
+          this.layerService.isLoading$.next(false)
+          console.error('Error loading WMS:', error);
+        },
+        complete: () => {
+          this.layerService.isLoading$.next(false)
+          console.log('All WMS layers processed.');
         }
-      },
-      error: (error) => {
-        this.searchingWms = false;
-        console.error('Error loading WMS:', error);
-      },
-      complete: () => {
-        this.layerService.isLoading$.next(false)
-        console.log('All WMS layers processed.');
-      }
+      });
+
     });
+
 
 
 

@@ -62,5 +62,31 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
 
+  public increaseZoom() {
+    this.mapService.increaseZoom();
+  }
+
+  public decreaseZoom() {
+    this.mapService.decreaseZoom();
+  }
+
+  public goBackPosition() {
+    this.mapService.goBackPosition();
+  }
+
+  public goForwardPosition() {
+    this.mapService.goForwardPosition();
+  }
+
+  public measureDistance() {
+    this.mapService.activateDistanceMeasure();
+  }
+
+  public measureArea() {
+    this.mapService.activateAreaMeasure();
+  }
+
+
+
 
 }

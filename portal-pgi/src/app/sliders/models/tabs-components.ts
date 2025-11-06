@@ -17,23 +17,23 @@ export interface TabComponent {
 export const COMPONENTS: TabComponent[] = [
     {
         componentName: 'layers',
-        componentIcon: './assets/icons/layers.svg',
+        componentIcon: './assets/icons-new/layers-icon.svg',
         component: LayersComponent,
         tabHeader: "WARSTWY",
         tooltip: "Warstwy"
     },
     {
         componentName: 'new-layer',
-        componentIcon: './assets/icons/add.svg',
+        componentIcon: './assets/icons-new/add-layer-icon.svg',
         component: NewLayerComponent,
         tabHeader: "DODAJ DANE",
         tooltip: "Dodaj dane z usług"
     },
     {
         componentName: 'validation',
-        componentIcon: './assets/icons/check.svg',
+        componentIcon: './assets/icons-new/check-mark-icon.svg',
         component: ValidationComponent,
         tabHeader: "WALIDACJA USŁUG",
-        tooltip: "Walidacja"
+        tooltip: "Walidacja usług"
     },
 ]

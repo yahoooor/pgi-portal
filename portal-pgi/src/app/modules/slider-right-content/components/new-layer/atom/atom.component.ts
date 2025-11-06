@@ -146,14 +146,13 @@ export class AtomComponent implements OnInit {
 
     //let atomLinks: string[] = []
 
-    url = this.http.corsUrl + url
+    url = this.http.corsUrl + url//.replace("/service/atom/", "/md/service/")
 
     this.http.getCapabilities(url).subscribe(
       async (dataXML: any) => {
         const parser = new DOMParser();
         const xml = parser.parseFromString(dataXML, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-        console.log(obj)
         this.setAtomInfo(obj)
 
         console.log(findAllByKey(obj, "entry"))
@@ -300,7 +299,7 @@ export class AtomComponent implements OnInit {
       },
       error => {
         atomEntry.isLoading = false;
-        this.toastService.showMessageError("Nieprawidłowy link lub błąd po stronie serwera")
+        this.toastService.showMessageError("Usługa chwilowo niedostępna. Proszę spróbować później.")
       }
     )
   }
@@ -653,8 +652,11 @@ export interface ParsedAtomFeed {
 }
 
 export function parseAtomFeed(feedJson: any): ParsedAtomFeed {
+  const toArray = (v: any) => (v == null ? [] : (Array.isArray(v) ? v : [v]));
+
   const feed = feedJson?.feed ?? {};
 
+  const feedLinks = toArray(feed.link);
   const result: ParsedAtomFeed = {
     title: feed.title,
     subtitle: feed.subtitle,
@@ -665,46 +667,50 @@ export function parseAtomFeed(feedJson: any): ParsedAtomFeed {
       name: feed.author?.name,
       email: feed.author?.email,
     },
-    links: (feed.link ?? []).map((l: any) => ({
-      rel: l["@attributes"]?.rel,
-      href: l["@attributes"]?.href,
-      title: l["@attributes"]?.title,
-      type: l["@attributes"]?.type,
+    links: feedLinks.map((l: any) => ({
+      rel: l?.["@attributes"]?.rel,
+      href: l?.["@attributes"]?.href,
+      title: l?.["@attributes"]?.title,
+      type: l?.["@attributes"]?.type,
     })),
     entries: [],
   };
 
-  let entries = feed.entry ?? [];
-  if (!Array.isArray(entries)) {
-    entries = [entries];
-  }
+  let entries = toArray(feed.entry);
 
-  result.entries = entries.map((entry: any): AtomEntry1 => ({
-    title: entry.title,
-    id: entry.id,
-    summary: entry.summary,
-    updated: entry.updated,
-    rights: entry.rights,
-    author: {
-      name: entry.author?.name,
-      email: entry.author?.email,
-    },
-    links: (entry.link ?? []).map((l: any) => ({
-      rel: l["@attributes"]?.rel,
-      href: l["@attributes"]?.href,
-      title: l["@attributes"]?.title,
-      type: l["@attributes"]?.type,
-    })),
-    categories: (entry.category ?? []).map((c: any) => ({
-      label: c["@attributes"]?.label,
-      term: c["@attributes"]?.term,
-    })),
-    datasetIdentifier: {
-      namespace: entry["inspire_dls:spatial_dataset_identifier_namespace"],
-      code: entry["inspire_dls:spatial_dataset_identifier_code"],
-    },
-    geometry: entry["georss:polygon"],
-  }));
+  console.log(entries)
+
+  result.entries = entries.map((entry: any): AtomEntry1 => {
+    const entryLinks = toArray(entry?.link);
+    const entryCategories = toArray(entry?.category);
+
+    return {
+      title: entry.title,
+      id: entry.id,
+      summary: entry.summary,
+      updated: entry.updated,
+      rights: entry.rights,
+      author: {
+        name: entry.author?.name,
+        email: entry.author?.email,
+      },
+      links: entryLinks.map((l: any) => ({
+        rel: l?.["@attributes"]?.rel,
+        href: l?.["@attributes"]?.href,
+        title: l?.["@attributes"]?.title,
+        type: l?.["@attributes"]?.type,
+      })),
+      categories: entryCategories.map((c: any) => ({
+        label: c?.["@attributes"]?.label,
+        term: c?.["@attributes"]?.term,
+      })),
+      datasetIdentifier: {
+        namespace: entry["inspire_dls:spatial_dataset_identifier_namespace"],
+        code: entry["inspire_dls:spatial_dataset_identifier_code"],
+      },
+      geometry: entry["georss:polygon"],
+    } as AtomEntry1;
+  });
 
   return result;
 }

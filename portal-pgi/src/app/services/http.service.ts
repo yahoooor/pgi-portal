@@ -16,7 +16,7 @@ export enum SchemaType {
 })
 export class HttpService {
 
-  constructor(private http: HttpClient) { }
+  constructor(public http: HttpClient) { }
 
   corsUrl = "" //"http://192.168.1.63:3002/"
 

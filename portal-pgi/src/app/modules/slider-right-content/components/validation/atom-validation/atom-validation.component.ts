@@ -258,7 +258,7 @@ export class AtomValidationComponent implements OnInit {
       }
     ) */
 
-    url = url.replace(this.http.corsUrl, "")
+    url = url.replace(this.http.corsUrl, "").replace("/service/atom/", "/md/service/")
     this.httpOpenSearch = this.http.validateXml(url, SchemaType.OPEN_SEARCH).subscribe(
       (data: any) => {
         this.http.getValidationStatus(data['task_id']).pipe(

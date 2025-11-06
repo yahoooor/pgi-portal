@@ -72,7 +72,7 @@ export class LayersComponent implements OnInit {
 
   constructor(private layerService: LayerService,
     private mapService: MapService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.layerService.isLoading$.subscribe(isLoading => {
@@ -89,17 +89,22 @@ export class LayersComponent implements OnInit {
 
   }
 
-  opacitySliderChange(evt: Event, layerLegend: any){
+  opacitySliderChange(evt: Event, layerLegend: any) {
     //this.layerService.setWmsLayerOpacity(layerLegend)
   }
 
-  layerGroupVisibilityChange(event: any, layerGroup: LayerGroupLegend){
+  layerGroupVisibilityChange(event: any, layerGroup: LayerGroupLegend) {
     layerGroup.checked = event.checked
     WmsLayers[layerGroup.index].setVisible(event.checked)
   }
 
-  childLayerVisibilityChange(event: any, layer: LayerLegend) {
+  childLayerVisibilityChange(event: any, layer: LayerLegend, layerGroup: LayerGroupLegend) {
     WmsChildLayers[layer.parentIndex][layer.index].setVisible(event.checked)
+
+    if (!layerGroup.checked && event.checked) {
+      WmsLayers[layerGroup.index].setVisible(event.checked)
+      layerGroup.checked = true
+    }
   }
 
   deleteLayerGroup(layerGroup: LayerGroupLegend) {
@@ -107,7 +112,7 @@ export class LayersComponent implements OnInit {
     this.mapService.map.getLayers().forEach((layer: any) => {
       if (layerGroup.name === layer.values_.name || layerGroup.name === layer.values_.layerName) {
         this.mapService.map.removeLayer(layer)
-        
+
         let index = layerGroup.index
 
 

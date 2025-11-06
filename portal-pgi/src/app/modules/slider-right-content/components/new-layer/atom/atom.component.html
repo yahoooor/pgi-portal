@@ -38,11 +38,11 @@
                             <div class="form-title">Tytuł:</div>
                             <div class="form-value">{{ feed.title}}</div>
                         </div>
-                        <div class="form-row">
+                        <div class="form-row" *ngIf="feed.subtitle">
                             <div class="form-title">Opis:</div>
                             <div class="form-value">{{ feed.subtitle}}</div>
                         </div>
-                        <div class="form-row">
+                        <div class="form-row" *ngIf="feed.updated">
                             <div class="form-title">Aktualizacja:</div>
                             <div class="form-value">{{ feed.updated}}</div>
                         </div>
@@ -74,11 +74,11 @@
                                 <div class="form-title">Tytuł:</div>
                                 <div class="form-value">{{ entry.title}}</div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row" *ngIf="entry.summary">
                                 <div class="form-title">Opis:</div>
                                 <div class="form-value">{{ entry.summary}}</div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row" *ngIf="entry.updated">
                                 <div class="form-title">Aktualizacja:</div>
                                 <div class="form-value">{{ entry.updated}}</div>
                             </div>
@@ -93,7 +93,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row" *ngIf="entry.categories.length">
                                 <div class="form-title">Kategorie:</div>
                                 <div class="form-value">
                                     <div *ngFor="let category of entry.categories">
@@ -101,11 +101,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row" *ngIf="entry.links.length">
                                 <div class="form-title">Linki:</div>
                                 <div class="form-value">
                                     <div *ngFor="let link of entry.links">
-                                        <a [href]="link.href">{{link.title}}</a>
+                                        <a [href]="link.href">{{link.title || link.href}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div *ngIf="feed">
-                <div class="atom-results atom-form">
+                <div class="atom-results atom-form" *ngIf="atomEntries.length">
                     <div class="results-title">
                         <strong>Dane z usługi ATOM:</strong>
                     </div>
@@ -156,7 +156,7 @@
 
                 <br>
 
-                <div class="atom-form">
+                <div class="atom-form" *ngIf="feed.links.length">
                     <div class="atom-results">
                         <div class="results-title">
                             <strong>Linki zewnętrzne:</strong>

@@ -94,18 +94,18 @@ export class SliderRightComponent extends SlidersComponent implements AfterViewI
   }
 
   closeTab() {
-    this.selectedTabItem.nativeElement.setAttribute('style', 'background-color: #8D9EAC');
+    this.selectedTabItem.nativeElement.setAttribute('style', 'background-color: rgba(102, 102, 102, 0.6)');
     this.sliderService.closeRightSlider()
   }
 
   selectTab(tabComponent: TabComponent) {
     this.tabButtons.forEach(item => {
       if (item.nativeElement.id === tabComponent.componentName) {
-        item.nativeElement.setAttribute('style', 'background-color: #566978');
+        item.nativeElement.setAttribute('style', 'background-color: #666666');
         this.selectedTabItem = item
       }
       else {
-        item.nativeElement.setAttribute('style', 'background-color: #8D9EAC');
+        item.nativeElement.setAttribute('style', 'background-color: rgba(102, 102, 102, 0.6)');
       }
     })
 
