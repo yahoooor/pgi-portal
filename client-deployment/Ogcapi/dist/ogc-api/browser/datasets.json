@@ -1,0 +1,163 @@
+[
+  {
+    "id": 1,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski w skali 1:500 000 (2006)",
+    "description": "Zawiera dane dotyczące regionów morskich, w tym granice i charakterystyki obszarów.",
+    "url": "https://inspire.pgi.gov.pl/ows/datasets/org.2.d181a629-132b-45b3-81da-10814ff9ce2b_ogcapi"
+  },
+  {
+    "id": 2,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Bałtyku w skali 1:200 000",
+    "description": "Zawiera dane geologiczne dotyczące obszaru Morza Bałtyckiego, w tym warstwy geologiczne, typy skał oraz inne cechy geologiczne.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.d1940262-44c0-46a9-bd27-ec845a989d39_ogcapi"
+  },
+  {
+    "id": 3,
+    "type": "Feature",
+    "name": "Obszary dna morskiego - rodzaj osadów",
+    "description": "Zawiera dane dotyczące odwiertów szczelinowych, w tym lokalizacje, głębokości oraz podstawowe informacje geologiczne.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.d291061a-ca3e-44af-a9f1-aa6acd7fbbe9_ogcapi"
+  },
+  {
+    "id": 4,
+    "type": "Feature",
+    "name": "Odwierty",
+    "description": "Zawiera dane dotyczące lokalizacji, głębokości oraz podstawowych informacji geologicznych związanych z odwiertami.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.856dfab1-5135-465a-9480-f84e74023aa9_ogcapi"
+  },
+  {
+    "id": 5,
+    "type": "Feature",
+    "name": "Odwierty na potrzeby szczelinowania hydraulicznego",
+    "description": "Zawiera dane dotyczące odwiertów, dla których zastosowano szczelinowanie hydrauliczne, w tym ich lokalizacje i kluczowe parametry geologiczne.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.7602867a-e209-4276-a676-1d484f2e0cf6_ogcapi"
+  },
+  {
+    "id": 6,
+    "type": "Feature",
+    "name": "Zagrożenia geologiczne",
+    "description": "Zawiera dane dotyczące zagrożeń geologicznych, w tym osuwisk, trzęsień ziemi i innych zjawisk stanowiących ryzyko geologiczne.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.2cdb57ed-6490-4a04-af42-a030bb52cc2c_ogcapi"
+  },
+  {
+    "id": 7,
+    "type": "Feature",
+    "name": "Zasoby energetyczne",
+    "description": "Zawiera dane dotyczące geologicznych zasobów energetycznych, takich jak węgiel, ropa naftowa, gaz ziemny i inne surowce energetyczne.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.aed25e1f-395a-4f8a-b656-0ebb2e7a55af_ogcapi"
+  },
+  {
+    "id": 8,
+    "type": "Feature",
+    "name": "Geofizyka - grawimetria",
+    "description": "Zawiera dane dotyczące pomiarów grawimetrycznych, w tym anomalii siły ciężkości i ich interpretacji geologicznej.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 9,
+    "type": "Feature",
+    "name": "Geofizyka - magnetyka",
+    "description": "Zawiera dane na temat pomiarów i analiz magnetycznych związanych z badaniami geologicznymi.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 10,
+    "type": "Feature",
+    "name": "Geofizyka - magnetotelluryka",
+    "description": "Zawiera dane dotyczące badań magnetotellurycznych w kontekście geologicznym.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.450eae65-85bc-4717-b177-4d136bac5360_ogcapi"
+  },
+  {
+    "id": 11,
+    "type": "Feature",
+    "name": "Geofizyka - sejsmika",
+    "description": "Zawiera dane dotyczące badań sejsmicznych, w tym informacji o strukturze podłoża geologicznego i właściwościach sejsmicznych skał.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.c08583c1-2d06-4f25-b7d8-758e52fca658_ogcapi"
+  },
+  {
+    "id": 12,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP) w skali 1: 2 500 000 – czwartorzęd",
+    "description": "Zawiera dane dotyczące mapy geologicznej Polski w skali 1:2 500 000, skupiającej się na osadach i formacjach czwartorzędu.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2.de18af25-86b8-4ea0-a06b-89a3770b4124_ogcapi"
+  },
+  {
+    "id": 13,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:500 000 – czwartorzęd",
+    "description": "Zawiera dane dotyczące geologii czwartorzędu Polski w skali 1:500 000.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 14,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:500 000 – paleogen i neogen",
+    "description": "Zawiera dane dotyczące mapy geologicznej Polski w skali 1:500 000, przedstawiającej utwory paleogenu i neogenu.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 15,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:500 000 – podłoże kenozoiku",
+    "description": "Zawiera dane dotyczące podłoża kenozoiku w Polsce, przedstawione na mapie geologicznej w skali 1:500 000.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 16,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 500 m p.p.m.",
+    "description": "Zawiera dane dotyczące mapy geologicznej Polski w skali 1:750 000, przedstawiające przekrój na głębokości 500 m poniżej poziomu morza, związane z tematyką geologiczną.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 17,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 1000 m p.p.m.",
+    "description": "Zawiera dane dotyczące geologii Polski na mapie w skali 1:750 000, przedstawiającej przekrój na głębokości 1000 m p.p.m.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 18,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 2000 m p.p.m.",
+    "description": "Zawiera dane dotyczące mapy geologicznej Polski w skali 1:750 000 przedstawiającej przekrój geologiczny na głębokości 2000 m p.p.m.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 19,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 3000 m p.p.m.",
+    "description": "Zawiera dane na temat geologicznej mapy Polski w skali 1:750 000, przedstawiającej przekrój geologiczny na głębokości 3000 m poniżej poziomu morza.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 20,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 4000 m p.p.m.",
+    "description": "Zawiera dane dotyczące geologicznej mapy Polski (MGP) w skali 1:750 000, przedstawiającej przekrój geologiczny na głębokości 4000 m poniżej poziomu morza.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 21,
+    "type": "Feature",
+    "name": "Mapa Geologiczna Polski (MGP w skali 1:750 000 – mapa ścięcia na poziomie 5000 m p.p.m.",
+    "description": "Zawiera dane dotyczące mapy geologicznej Polski w skali 1:750 000, przedstawiającej przekrój geologiczny na poziomie 5000 m p.p.m., które są związane z tematyką geologiczną.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 22,
+    "type": "Feature",
+    "name": "Hydrogeologia",
+    "description": "Zawiera dane na temat wód podziemnych, ich występowania, ruchu, właściwości chemicznych i fizycznych oraz interakcji z otoczeniem geologicznym.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  },
+  {
+    "id": 23,
+    "type": "Feature",
+    "name": "Zasoby mineralne",
+    "description": "Zawiera dane dotyczące geologicznych zasobów mineralnych, takich jak metale, niemetale i inne surowce.",
+    "url": "https://inspire2.pgi.gov.pl/ows/datasets/org.2._ogcapi"
+  }
+]

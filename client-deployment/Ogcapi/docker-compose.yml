@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: ogcapi-nginx
+    ports:
+      - "8061:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./../static/datasets_ogc.json:/usr/share/nginx/html/ogc-api/browser/datasets.json:z
+
+    restart: unless-stopped
